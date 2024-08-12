@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Gadjah Djaya</string>
+    <string name="default_web_client_id">138908590098-38bft71c7vthdc0k185dt549kjv0u6mr.apps.googleusercontent.com</string>
+    <string name="kategori_menu">Pilih Kategori</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    <string-array name="periode_array">
+        <item>Harian</item>
+        <item>Mingguan</item>
+        <item>Bulanan</item>
+        <item>Tahunan</item>
+    </string-array>
+</resources>

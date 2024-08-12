@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_nama_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nama Menu"
+        android:inputType="text"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/et_harga_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Harga Menu"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
+
+    <Spinner
+        android:id="@+id/spinner_kategori"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/kategori_menu"
+        android:minHeight="48dp"
+        android:prompt="@string/kategori_menu" />
+
+    <ImageView
+        android:id="@+id/iv_menu_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_image"
+        android:scaleType="centerCrop"/>
+
+    <Button
+        android:id="@+id/btn_tambah_gambar"
+        android:layout_width="wrap_content"
+        android:backgroundTint="@color/colorbuton"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:text="Tambah Gambar"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btn_simpan_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorbuton"
+        android:textColor="@color/white"
+        android:text="Simpan Menu"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

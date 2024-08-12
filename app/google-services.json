@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "138908590098",
+    "project_id": "gadjahdjaya-78fdf",
+    "storage_bucket": "gadjahdjaya-78fdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138908590098:android:9bc8112866c5b6dee6b8cb",
+        "android_client_info": {
+          "package_name": "com.app.gadjahdjaya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138908590098-kn4vmvlmlgcbn1ch1kf7ffll8aj1dss6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.gadjahdjaya",
+            "certificate_hash": "6a2571c198b2aabc2919468db767377cf87a0aad"
+          }
+        },
+        {
+          "client_id": "138908590098-38bft71c7vthdc0k185dt549kjv0u6mr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbAXGLugifnBnk0VFPgO2BJeGNaE_dKRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138908590098-38bft71c7vthdc0k185dt549kjv0u6mr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

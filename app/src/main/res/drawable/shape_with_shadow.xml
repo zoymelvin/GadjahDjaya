@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
+        <shape>
+            <solid android:color="#80000000" /> <!-- Semi-transparent black for shadow -->
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+
+    <!-- Main shape layer -->
+    <item>
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+</layer-list>

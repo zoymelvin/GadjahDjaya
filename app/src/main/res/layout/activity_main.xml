@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:backgroundTint="@color/background">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/img_1"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/img_2"
+        android:layout_width="267dp"
+        android:layout_height="236dp"
+        android:layout_below="@+id/img_1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="125dp" />
+
+    <TextView
+        android:id="@+id/txt_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_2"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="Sederhanakan Restoran Anda dengan Kasir Kami!"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="387dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/txt_2"
+        android:layout_width="387dp"
+        android:layout_height="71dp"
+        android:layout_below="@+id/txt_1"
+        android:fontFamily="@font/poppinsregular"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="Ubah keuangan restoran Anda secara real-time! Aplikasi kasir kami menyederhanakan transaksi dan manajemen keuangan. Tingkatkan efisiensi restoran Anda dengan mudah."
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:textSize="12sp"
+        tools:layout_editor_absoluteX="12dp"
+        tools:layout_editor_absoluteY="436dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="25dp"
+        android:width="300dp"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        tools:ignore="MissingConstraints,TextSizeCheck"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="565dp" />
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_1"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:width="300dp"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Register"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        tools:ignore="MissingConstraints,TextSizeCheck"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="631dp"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/backgroundpay"
+    tools:context=".QrisSettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="840dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_white_background"
+        android:padding="16dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="QRIS"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppinsbold"
+            android:layout_gravity="center"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="            Masukkan kode qris anda untuk mengaktifkan transaksi menggunakan Qris"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/imageView_qr"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/ic_placeholder_qr"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"/>
+
+        <Button
+            android:id="@+id/button_upload"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="Upload"
+            android:background="@drawable/button_shape"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="206dp"
+            android:text="Simpan"
+            android:background="@drawable/gradient_background"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

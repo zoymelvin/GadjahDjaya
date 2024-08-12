@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="200dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="5dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageview_menu"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorners"
+                    app:srcCompat="@drawable/menu1" />
+
+                <TextView
+                    android:id="@+id/tampilnamamenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageview_menu"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Nasi Goreng Telur Ayam"
+                    android:textColor="@color/black"
+                    android:textSize="11dp"
+                    tools:ignore="TextSizeCheck" />
+
+                <TextView
+                    android:id="@+id/tampilhargamenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tampilnamamenu"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/poppinsbold"
+                    android:text="Rp 20.000"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    tools:ignore="TextSizeCheck"/>
+
+                <ImageButton
+                    android:id="@+id/ic_edit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_editmenu"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_below="@id/tampilnamamenu"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="110dp"
+                    android:scaleType="centerInside" />
+
+                <ImageButton
+                    android:id="@+id/ic_delete"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_below="@id/tampilnamamenu"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginStart="135dp"
+                    android:scaleType="centerInside"/>
+
+
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

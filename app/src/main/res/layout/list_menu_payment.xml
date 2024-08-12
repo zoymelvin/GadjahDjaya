@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imageview_menu"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/menu1"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama Menu"
+        android:fontFamily="@font/poppinsmedium"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@id/imageview_menu"
+        app:layout_constraintTop_toTopOf="@id/imageview_menu"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/textview_menu_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X 3"
+        android:fontFamily="@font/poppinsmedium"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@id/imageview_menu"
+        app:layout_constraintTop_toBottomOf="@id/textview_menu_name"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/textview_total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="Rp 20.000"
+        android:fontFamily="@font/poppinsmedium"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Button for increasing quantity -->
+    <ImageView
+        android:id="@+id/imageview_increase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textview_menu_quantity" />
+
+    <!-- Button for decreasing quantity -->
+    <ImageView
+        android:id="@+id/imageview_decrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageview_increase" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

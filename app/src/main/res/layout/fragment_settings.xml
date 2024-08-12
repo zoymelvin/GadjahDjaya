@@ -1,0 +1,232 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundpay"> <!-- Grey background -->
+
+    <!-- White rounded layer -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="850dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/rounded_white_background"
+        android:padding="16dp">
+
+        <!-- Circular image for logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/logo" /> <!-- Replace with your logo -->
+
+        <!-- User name -->
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Joy Melvin Ginting"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Edit Account -->
+        <LinearLayout
+            android:id="@+id/edit_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_name"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/icon_edit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_edit" /> <!-- Replace with your icon -->
+
+                <TextView
+                    android:id="@+id/text_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon_edit"
+                    android:layout_marginStart="16dp"
+                    android:text="Edit Akun"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/arrow_edit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_arrow1" /> <!-- Replace with your icon -->
+            </RelativeLayout>
+
+            <View
+                android:layout_width="272dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#D3D3D3" /> <!-- Grey separator -->
+
+        </LinearLayout>
+
+        <!-- Repeat above block for other menu items (QRIS, Kritik dan saran, Laporan Bug) -->
+        <!-- QRIS -->
+        <LinearLayout
+            android:id="@+id/qris"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_account"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/icon_qris"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_qris" /> <!-- Replace with your icon -->
+
+                <TextView
+                    android:id="@+id/text_qris"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon_qris"
+                    android:layout_marginStart="16dp"
+                    android:text="Qris"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/arrow_qris"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_arrow1" /> <!-- Replace with your icon -->
+            </RelativeLayout>
+
+            <View
+                android:layout_width="272dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#D3D3D3" /> <!-- Grey separator -->
+
+        </LinearLayout>
+
+        <!-- Kritik dan Saran -->
+        <LinearLayout
+            android:id="@+id/feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/qris"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/icon_feedback"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_feedback" /> <!-- Replace with your icon -->
+
+                <TextView
+                    android:id="@+id/text_feedback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon_feedback"
+                    android:layout_marginStart="16dp"
+                    android:text="Kritik dan saran"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/arrow_feedback"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_arrow1" /> <!-- Replace with your icon -->
+            </RelativeLayout>
+
+            <View
+                android:layout_width="272dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#D3D3D3" /> <!-- Grey separator -->
+
+        </LinearLayout>
+
+        <!-- Laporan Bug -->
+        <LinearLayout
+            android:id="@+id/bug_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feedback"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/icon_bug"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_bug" /> <!-- Replace with your icon -->
+
+                <TextView
+                    android:id="@+id/text_bug"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon_bug"
+                    android:layout_marginStart="16dp"
+                    android:text="Laporan Bug"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/arrow_bug"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_arrow1" /> <!-- Replace with your icon -->
+            </RelativeLayout>
+
+            <View
+                android:layout_width="272dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#D3D3D3" /> <!-- Grey separator -->
+
+        </LinearLayout>
+
+        <!-- Logout button -->
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bug_report"
+            android:layout_marginTop="244dp"
+            android:background="@drawable/btn_logout"
+            android:text="LOGOUT"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</RelativeLayout>
