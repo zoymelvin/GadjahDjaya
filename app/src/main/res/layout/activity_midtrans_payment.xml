@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- WebView untuk menampilkan halaman pembayaran Midtrans -->
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/btn_check_status" />
+
+    <!-- Tombol untuk mengecek status transaksi -->
+    <Button
+        android:id="@+id/btn_check_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check Status"
+        android:layout_alignParentBottom="true"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_margin="16dp" />
+
+</RelativeLayout>

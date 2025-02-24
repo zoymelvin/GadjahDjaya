@@ -2,6 +2,7 @@ package com.app.gadjahdjaya
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.app.gadjahdjaya.ui.menu.MenuFragment
 
 class MenuActivity : AppCompatActivity() {
 

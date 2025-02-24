@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.widget.ImageButton
-import com.app.gadjahdjaya.ui.SettingsFragment
-
+import com.app.gadjahdjaya.ui.menu.MenuFragment
+import com.app.gadjahdjaya.ui.stokbahan.StokBahanBakuFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -31,8 +31,8 @@ class HomeActivity : AppCompatActivity() {
                     openFragment(KeuanganFragment())
                     true
                 }
-                R.id.navigation_settings -> {
-                    openFragment(SettingsFragment())
+                R.id.navigation_bahanbaku -> {
+                    openFragment(StokBahanBakuFragment()) // ✅ Perbaikan di sini
                     true
                 }
                 else -> false
@@ -43,8 +43,10 @@ class HomeActivity : AppCompatActivity() {
             openFragment(KasirMenuFragment())
         }
 
-        // Optionally, set default navigation item if required.
-        bottomNavigation.selectedItemId = R.id.navigation_beranda
+        // Set default fragment
+        if (savedInstanceState == null) {
+            openFragment(BerandaFragment())
+        }
     }
 
     private fun openFragment(fragment: Fragment) {

@@ -2,20 +2,37 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/settingFragment">
+    app:startDestination="@id/stokBahanBakuFragment">
 
+    <!-- Fragment Utama: Stok Bahan Baku -->
     <fragment
-        android:id="@+id/settingFragment"
-        android:label="Setting"
-        tools:layout="@layout/fragment_settings">
+        android:id="@+id/stokBahanBakuFragment"
+        android:name="com.app.gadjahdjaya.ui.stokbahan.StokBahanBakuFragment"
+        android:label="Stok Bahan Baku"
+        tools:layout="@layout/fragment_stok_bahan_baku">
+
+        <!-- Navigasi ke Statistik Stok -->
         <action
-            android:id="@+id/action_settingFragment_to_editAccountFragment"
-            app:destination="@id/editAccountFragment" />
+            android:id="@+id/action_stokBahanBakuFragment_to_fragmentTotalStock"
+            app:destination="@id/fragmentTotalStock" />
+
+        <!-- Navigasi ke Stok Menipis -->
+        <action
+            android:id="@+id/action_stokBahanBakuFragment_to_stokMenipisFragment"
+            app:destination="@id/stokMenipisFragment" />
     </fragment>
 
+    <!-- Fragment Statistik Stok -->
     <fragment
-        android:id="@+id/editAccountFragment"
-        android:label="Edit Account"
-        tools:layout="@layout/fragment_edit_account"/>
+        android:id="@+id/fragmentTotalStock"
+        android:name="com.app.gadjahdjaya.ui.stokbahan.FragmentTotalStock"
+        android:label="Statistik Stok"
+        tools:layout="@layout/fragment_total_stock" />
+
+    <!-- Fragment Stok Menipis -->
+    <fragment
+        android:id="@+id/stokMenipisFragment"
+        android:name="com.app.gadjahdjaya.ui.stokbahan.StokMenipisFragment"
+        android:label="Stok Menipis"
+        tools:layout="@layout/fragment_stok_menipis" />
 </navigation>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ui.payment.KonfirmasiPaymentActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txt_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/poppinsbold"
+            android:text="Pembayaran"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <!-- Total Pembayaran -->
+
+    <!-- Jumlah Uang -->
+
+    <TextView
+        android:id="@+id/txt_total_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Total Pembayaran"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_goneMarginStart="12dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/txt_total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Rp 240.000"
+        android:textColor="@color/green"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_total_label" />
+
+    <TextView
+        android:id="@+id/txt_jumlah_uang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="Jumlah Uang"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_total_price" />
+
+    <EditText
+        android:id="@+id/input_jumlah_uang"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_input"
+        android:hint="Rp 0"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:paddingStart="16dp"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/txt_jumlah_uang"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"/>
+
+    <!-- Kembalian -->
+
+    <TextView
+        android:id="@+id/txt_kembalian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="Kembalian"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_jumlah_uang" />
+
+    <TextView
+        android:id="@+id/txt_kembalian_value"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_input"
+        android:gravity="center"
+        android:text="Rp 0"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/txt_kembalian"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"/>
+
+    <!-- Tombol Pecahan Uang -->
+
+    <Button
+        android:id="@+id/btn_uang_pas"
+        android:layout_width="375dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_button_grey"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="Uang pas"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_kembalian_value" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_uang_pas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+        <Button
+            android:id="@+id/btn_uang_lain1"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            style="@style/CustomButtonStyle"
+            android:text="Rp 250.000"
+            android:textColor="@color/white"/>
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/btn_uang_lain2"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_button_grey"
+            android:text="Rp 300.000"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <!-- Tombol Konfirmasi Pembayaran -->
+    <Button
+        android:id="@+id/btn_konfirmasi"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/button_shape"
+        android:text="Konfirmasi Pembayaran"
+        android:textColor="@color/white"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

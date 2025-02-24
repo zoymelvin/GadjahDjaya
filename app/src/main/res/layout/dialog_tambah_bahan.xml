@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Nama Bahan Baku -->
+    <EditText
+        android:id="@+id/etNamaBahan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nama Bahan Baku"
+        android:fontFamily="@font/poppinsmedium"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:background="@android:drawable/editbox_background"/>
+
+    <!-- Layout Kategori Bahan (Text + Spinner) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kategori: "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingEnd="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerKategori"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"/>
+    </LinearLayout>
+
+    <!-- Layout Stok dan Satuan -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:id="@+id/etStokBahan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Stok Awal"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background"/>
+
+        <Spinner
+            android:id="@+id/spinnerSatuan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Tombol Tambah -->
+    <Button
+        android:id="@+id/btnSimpanBahan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:fontFamily="@font/poppinsbold"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

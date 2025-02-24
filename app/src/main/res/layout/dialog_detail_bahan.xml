@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="4dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Nama Bahan -->
+        <TextView
+            android:id="@+id/tvNamaBahanDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Bahan: Ayam"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="14dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppinsregular"
+            android:textColor="@android:color/black"/>
+
+        <!-- Tanggal Masuk -->
+        <TextView
+            android:id="@+id/tvTanggalMasukDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="Tanggal Masuk: 6 Juni 2025"
+            android:fontFamily="@font/poppinsregular"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Stok & Satuan -->
+        <TextView
+            android:id="@+id/tvStokBahanDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stok: 12 Potong"
+            android:fontFamily="@font/poppinsregular"
+            android:layout_marginStart="15dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Tombol Edit & Hapus -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <ImageButton
+                android:id="@+id/ic_pluss"
+                android:layout_width="34dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/tampilnamamenu"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_pluss"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <ImageButton
+                android:id="@+id/ic_edit"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_editmenu"
+                android:background="?attr/selectableItemBackground"
+                android:layout_below="@id/tampilnamamenu"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/ic_delete"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackground"
+                android:layout_below="@id/tampilnamamenu"
+                android:layout_marginTop="-2dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="23dp"
+                android:scaleType="centerInside"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

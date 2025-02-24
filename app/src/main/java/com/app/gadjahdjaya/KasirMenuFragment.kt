@@ -4,17 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.gadjahdjaya.model.MenuItem
+import com.app.gadjahdjaya.ui.payment.PaymentActivity
 import com.google.firebase.database.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class KasirMenuFragment : Fragment() {
 
@@ -24,9 +26,14 @@ class KasirMenuFragment : Fragment() {
     private lateinit var minumanAdapter: KasirMenuAdapter
     private lateinit var database: DatabaseReference
     private lateinit var searchEditText: EditText
+    private lateinit var btnMakanan: TextView
+    private lateinit var btnMinuman: TextView
+    private lateinit var btnCheckout: Button
+    private lateinit var tabIndicator: View
+
     private val menuMakananList = mutableListOf<MenuItem>()
     private val menuMinumanList = mutableListOf<MenuItem>()
-    private val cartList = mutableListOf<MenuItem>()
+    private val cartMap = mutableMapOf<String, MenuItem>() // ✅ Menggunakan HashMap untuk menghindari duplikasi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,55 +41,73 @@ class KasirMenuFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_kasir_menu, container, false)
 
-        recyclerViewMakanan = view.findViewById(R.id.recyclerView_makanankasir)
-        recyclerViewMinuman = view.findViewById(R.id.recyclerView_minumankasir)
+        // Inisialisasi UI
+        recyclerViewMakanan = view.findViewById(R.id.recyclerView_makanan)
+        recyclerViewMinuman = view.findViewById(R.id.recyclerView_minuman)
         searchEditText = view.findViewById(R.id.searchEditText)
+        btnMakanan = view.findViewById(R.id.btn_makanan)
+        btnMinuman = view.findViewById(R.id.btn_minuman)
+        btnCheckout = view.findViewById(R.id.btn_buat_pesanan)
+        tabIndicator = view.findViewById(R.id.tab_indicator)
 
-        recyclerViewMakanan.layoutManager = GridLayoutManager(context, 2)
-        recyclerViewMinuman.layoutManager = GridLayoutManager(context, 2)
+        // Atur layout Grid
+        recyclerViewMakanan.layoutManager = GridLayoutManager(context, 1)
+        recyclerViewMinuman.layoutManager = GridLayoutManager(context, 1)
 
+        // Adapter untuk makanan
         makananAdapter = KasirMenuAdapter(requireContext(), menuMakananList, object : KasirMenuAdapter.OnItemClickListener {
             override fun onIncreaseQuantity(menuItem: MenuItem) {
-                addToCart(menuItem)
-                makananAdapter.notifyDataSetChanged()
+                updateCart(menuItem.id, 1)
             }
 
             override fun onDecreaseQuantity(menuItem: MenuItem) {
-                removeFromCart(menuItem)
-                makananAdapter.notifyDataSetChanged()
+                updateCart(menuItem.id, -1)
             }
         })
         recyclerViewMakanan.adapter = makananAdapter
 
+        // Adapter untuk minuman
         minumanAdapter = KasirMenuAdapter(requireContext(), menuMinumanList, object : KasirMenuAdapter.OnItemClickListener {
             override fun onIncreaseQuantity(menuItem: MenuItem) {
-                addToCart(menuItem)
-                minumanAdapter.notifyDataSetChanged()
+                updateCart(menuItem.id, 1)
             }
 
             override fun onDecreaseQuantity(menuItem: MenuItem) {
-                removeFromCart(menuItem)
-                minumanAdapter.notifyDataSetChanged()
+                updateCart(menuItem.id, -1)
             }
         })
         recyclerViewMinuman.adapter = minumanAdapter
 
+        // Firebase Database
         database = FirebaseDatabase.getInstance().getReference("menuItems")
 
-        view.findViewById<Button>(R.id.btn_makanan).setOnClickListener {
+        // Tombol kategori makanan
+        btnMakanan.setOnClickListener {
             recyclerViewMakanan.visibility = View.VISIBLE
             recyclerViewMinuman.visibility = View.GONE
+            btnMakanan.setTextColor(resources.getColor(R.color.blue_primary))
+            btnMinuman.setTextColor(resources.getColor(R.color.grey2))
+
+            tabIndicator.animate().x(0f).setDuration(200).start()
         }
 
-        view.findViewById<Button>(R.id.btn_minuman).setOnClickListener {
+        // Tombol kategori minuman
+        btnMinuman.setOnClickListener {
             recyclerViewMakanan.visibility = View.GONE
             recyclerViewMinuman.visibility = View.VISIBLE
+            btnMakanan.setTextColor(resources.getColor(R.color.grey2))
+            btnMinuman.setTextColor(resources.getColor(R.color.blue_primary))
+
+            val tabWidth = btnMakanan.width
+            tabIndicator.animate().x(tabWidth.toFloat()).setDuration(200).start()
         }
 
-        view.findViewById<Button>(R.id.btn_pembayaran).setOnClickListener {
+        // Tombol checkout
+        btnCheckout.setOnClickListener {
             navigateToPayment()
         }
 
+        // Pencarian menu
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -100,21 +125,15 @@ class KasirMenuFragment : Fragment() {
     }
 
     private fun fetchDataFromDatabase() {
-        database.addValueEventListener(object : ValueEventListener {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 menuMakananList.clear()
                 menuMinumanList.clear()
+
                 for (dataSnapshot in snapshot.children) {
-                    val menuItemMap = dataSnapshot.value as? Map<String, Any>
-                    if (menuItemMap != null) {
-                        val menuItem = MenuItem(
-                            id = dataSnapshot.key ?: "",
-                            kategori = menuItemMap["kategori"] as? String ?: "",
-                            gambar = menuItemMap["gambar"] as? String ?: "",
-                            nama = menuItemMap["nama"] as? String ?: "",
-                            harga = (menuItemMap["harga"] as? Long)?.toInt() ?: 0,
-                            jumlah = (menuItemMap["jumlah"] as? Long)?.toInt() ?: 0 // pastikan data dari firebase memiliki jumlah
-                        )
+                    val menuItem = dataSnapshot.getValue(MenuItem::class.java)
+                    if (menuItem != null) {
+                        menuItem.jumlah = 0 // Pastikan default jumlah adalah 0
                         if (menuItem.kategori == "Makanan") {
                             menuMakananList.add(menuItem)
                         } else if (menuItem.kategori == "Minuman") {
@@ -122,12 +141,13 @@ class KasirMenuFragment : Fragment() {
                         }
                     }
                 }
+
                 makananAdapter.notifyDataSetChanged()
                 minumanAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors.
+                // Tangani error
             }
         })
     }
@@ -140,30 +160,38 @@ class KasirMenuFragment : Fragment() {
         minumanAdapter.updateData(filteredMinumanList)
     }
 
-    private fun addToCart(menuItem: MenuItem) {
-        val existingItem = cartList.find { it.id == menuItem.id }
-        if (existingItem != null) {
-            existingItem.jumlah++
-        } else {
-            menuItem.jumlah = 1
-            cartList.add(menuItem)
-        }
-    }
+    private fun updateCart(menuId: String, change: Int) {
+        val menuItem = (menuMakananList.find { it.id == menuId } ?: menuMinumanList.find { it.id == menuId })?.copy()
 
-    private fun removeFromCart(menuItem: MenuItem) {
-        val existingItem = cartList.find { it.id == menuItem.id }
-        if (existingItem != null) {
-            if (existingItem.jumlah > 1) {
-                existingItem.jumlah--
-            } else {
-                cartList.remove(existingItem)
+        if (menuItem != null) {
+            val existingItem = cartMap[menuId]
+
+            if (existingItem != null) {
+                existingItem.jumlah += change
+                if (existingItem.jumlah <= 0) {
+                    cartMap.remove(menuId)
+                }
+            } else if (change > 0) {
+                menuItem.jumlah = 1
+                cartMap[menuId] = menuItem
             }
+
+            Log.d("KasirMenu", "Cart: ${cartMap.size} items")
+
+            makananAdapter.notifyDataSetChanged()
+            minumanAdapter.notifyDataSetChanged()
         }
     }
 
     private fun navigateToPayment() {
+        if (cartMap.isEmpty()) {
+            return
+        }
+
+        val cartList = ArrayList(cartMap.values)
+
         val intent = Intent(requireContext(), PaymentActivity::class.java)
-        intent.putParcelableArrayListExtra("cartItems", ArrayList(cartList))
+        intent.putParcelableArrayListExtra("cartItems", cartList)
         startActivity(intent)
     }
 }

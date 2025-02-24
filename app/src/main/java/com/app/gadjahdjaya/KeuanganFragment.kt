@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.gadjahdjaya.model.MenuItem
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import java.text.SimpleDateFormat

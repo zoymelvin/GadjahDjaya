@@ -1,4 +1,4 @@
-package com.app.gadjahdjaya
+package com.app.gadjahdjaya.ui.menu
 
 import android.os.Bundle
 import android.text.Editable
@@ -6,76 +6,69 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.app.gadjahdjaya.EditMenuFragment
+import com.app.gadjahdjaya.MenuAdapter
+import com.app.gadjahdjaya.R
+import com.app.gadjahdjaya.databinding.FragmentMenuBinding
+import com.app.gadjahdjaya.model.MenuItem
 import com.google.firebase.database.*
-import java.text.DecimalFormat
-import java.util.*
 
 class MenuFragment : Fragment(), MenuAdapter.OnItemClickListener {
 
-    private lateinit var recyclerViewMakanan: RecyclerView
-    private lateinit var recyclerViewMinuman: RecyclerView
+    private var _binding: FragmentMenuBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var database: DatabaseReference
     private lateinit var makananAdapter: MenuAdapter
     private lateinit var minumanAdapter: MenuAdapter
-    private lateinit var database: DatabaseReference
-    private lateinit var searchEditText: EditText
     private val makananList = mutableListOf<MenuItem>()
     private val minumanList = mutableListOf<MenuItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_menu, container, false)
-        recyclerViewMakanan = view.findViewById(R.id.recyclerViewMakanan)
-        recyclerViewMinuman = view.findViewById(R.id.recyclerViewMinuman)
-        searchEditText = view.findViewById(R.id.searchEditText)
-
-        recyclerViewMakanan.layoutManager = GridLayoutManager(context, 2)
-        recyclerViewMinuman.layoutManager = GridLayoutManager(context, 2)
-
-        makananAdapter = MenuAdapter(requireContext(), makananList, this)
-        minumanAdapter = MenuAdapter(requireContext(), minumanList, this)
-        recyclerViewMakanan.adapter = makananAdapter
-        recyclerViewMinuman.adapter = minumanAdapter
-
-        database = FirebaseDatabase.getInstance().getReference("menuItems")
-
-        searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filter(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        return view
+    ): View {
+        _binding = FragmentMenuBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<Button>(R.id.btn_tambah_menu)?.setOnClickListener {
-            tambahMenu()
-        }
 
-        view.findViewById<Button>(R.id.btn_mkn)?.setOnClickListener {
-            toggleRecyclerView(true)
-        }
+        database = FirebaseDatabase.getInstance().getReference("menuItems")
 
-        view.findViewById<Button>(R.id.btn_minum)?.setOnClickListener {
-            toggleRecyclerView(false)
-        }
-    }
+        // ✅ Setup RecyclerView
+        binding.recyclerViewMakanan.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerViewMinuman.layoutManager = GridLayoutManager(requireContext(), 2)
 
-    override fun onResume() {
-        super.onResume()
+        makananAdapter = MenuAdapter(requireContext(), makananList, this)
+        minumanAdapter = MenuAdapter(requireContext(), minumanList, this)
+
+        binding.recyclerViewMakanan.adapter = makananAdapter
+        binding.recyclerViewMinuman.adapter = minumanAdapter
+
+        // ✅ Setup tombol filter makanan & minuman
+        binding.btnMakanan.setOnClickListener { toggleRecyclerView(true) }
+        binding.btnMinuman.setOnClickListener { toggleRecyclerView(false) }
+
+        // ✅ Setup tombol tambah menu
+        binding.btnTambahMenu.setOnClickListener { tambahMenu() }
+
+        // ✅ Setup pencarian menu
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterMenu(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // ✅ Load data menu dari Firebase
         fetchDataFromDatabase()
     }
 
@@ -84,20 +77,13 @@ class MenuFragment : Fragment(), MenuAdapter.OnItemClickListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 makananList.clear()
                 minumanList.clear()
+
                 for (dataSnapshot in snapshot.children) {
-                    val menuItemMap = dataSnapshot.value as? Map<String, Any>
-                    if (menuItemMap != null) {
-                        val menuItem = MenuItem(
-                            id = dataSnapshot.key ?: "",
-                            kategori = menuItemMap["kategori"] as? String ?: "",
-                            gambar = menuItemMap["gambar"] as? String ?: "",
-                            nama = menuItemMap["nama"] as? String ?: "",
-                            harga = (menuItemMap["harga"] as? Long)?.toInt() ?: 0
-                        )
-                        if (menuItem.kategori.equals("Makanan", ignoreCase = true)) {
-                            makananList.add(menuItem)
-                        } else if (menuItem.kategori.equals("Minuman", ignoreCase = true)) {
-                            minumanList.add(menuItem)
+                    val menuItem = dataSnapshot.getValue(MenuItem::class.java)
+                    if (menuItem != null) {
+                        when {
+                            menuItem.kategori.equals("Makanan", ignoreCase = true) -> makananList.add(menuItem)
+                            menuItem.kategori.equals("Minuman", ignoreCase = true) -> minumanList.add(menuItem)
                         }
                     }
                 }
@@ -106,7 +92,7 @@ class MenuFragment : Fragment(), MenuAdapter.OnItemClickListener {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors.
+                Toast.makeText(requireContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -132,7 +118,7 @@ class MenuFragment : Fragment(), MenuAdapter.OnItemClickListener {
 
     override fun onDeleteClick(menuItem: MenuItem) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Konfirmasi")
+            .setTitle("Konfirmasi Hapus")
             .setMessage("Apakah Anda yakin ingin menghapus menu ini?")
             .setPositiveButton("Ya") { _, _ ->
                 hapusMenu(menuItem)
@@ -142,34 +128,42 @@ class MenuFragment : Fragment(), MenuAdapter.OnItemClickListener {
     }
 
     private fun hapusMenu(menuItem: MenuItem) {
-        val menuRef = database.child(menuItem.id)
-        menuRef.removeValue()
+        database.child(menuItem.id).removeValue()
             .addOnSuccessListener {
-                // Jika berhasil dihapus, Anda bisa melakukan tindakan tambahan di sini
+                Toast.makeText(requireContext(), "Menu berhasil dihapus", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener { e ->
-                // Jika gagal menghapus, Anda bisa menangani kesalahan di sini
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Gagal menghapus menu", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun toggleRecyclerView(showMakanan: Boolean) {
-        if (showMakanan) {
-            recyclerViewMakanan.visibility = View.VISIBLE
-            recyclerViewMinuman.visibility = View.GONE
-        } else {
-            recyclerViewMakanan.visibility = View.GONE
-            recyclerViewMinuman.visibility = View.VISIBLE
-        }
+        binding.recyclerViewMakanan.visibility = if (showMakanan) View.VISIBLE else View.GONE
+        binding.recyclerViewMinuman.visibility = if (showMakanan) View.GONE else View.VISIBLE
+
+        // ✅ Tambahkan efek perubahan warna tab dan animasi indikator
+        binding.btnMakanan.setTextColor(
+            ContextCompat.getColor(requireContext(), if (showMakanan) R.color.primaryColor else R.color.grey)
+        )
+        binding.btnMinuman.setTextColor(
+            ContextCompat.getColor(requireContext(), if (showMakanan) R.color.grey else R.color.primaryColor)
+        )
+        binding.tabIndicator.animate()
+            .translationX(if (showMakanan) 0f else binding.tabContainer.width / 2f)
+            .setDuration(200)
+            .start()
     }
 
-    private fun filter(text: String) {
-        val filteredMakananList = makananList.filter {
-            it.nama.contains(text, ignoreCase = true)
-        }
-        val filteredMinumanList = minumanList.filter {
-            it.nama.contains(text, ignoreCase = true)
-        }
-        makananAdapter.updateList(filteredMakananList)
-        minumanAdapter.updateList(filteredMinumanList)
+    private fun filterMenu(text: String) {
+        val filteredMakanan = makananList.filter { it.nama.contains(text, ignoreCase = true) }
+        val filteredMinuman = minumanList.filter { it.nama.contains(text, ignoreCase = true) }
+
+        makananAdapter.updateList(filteredMakanan)
+        minumanAdapter.updateList(filteredMinuman)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

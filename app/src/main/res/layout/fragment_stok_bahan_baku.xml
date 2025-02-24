@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- AppBarLayout untuk Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarStok"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="Stok Bahan Baku"
+            android:fontFamily="@font/poppinsbold"
+            app:titleTextColor="@android:color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- NestedScrollView untuk konten utama -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Search Bar -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/search_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:layout_marginBottom="11dp"
+                android:background="#FFFFFF"
+                android:elevation="4dp"
+                android:padding="18dp">
+
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/search_box"
+                    android:drawableStart="@drawable/ic_search"
+
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:hint="Cari Bahan..."
+                    android:padding="9dp"
+                    android:textSize="14sp"
+                    tools:ignore="MissingConstraints" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Tombol untuk melihat bahan persentase -->
+            <Button
+                android:id="@+id/btnLihatPersentase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lihat di Bahan Baku Persentase"
+                android:visibility="gone"
+                android:backgroundTint="@color/primaryColor"
+                android:textColor="@android:color/white"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Layout untuk Statistik -->
+            <LinearLayout
+                android:id="@+id/statistics_container"
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:layout_marginTop="1dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="2">
+
+                <!-- Kotak Total Stok -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardTotalStok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="4dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeColor="#CCCCCC"
+                    app:strokeWidth="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iconTotalStok"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="-50dp"
+                            android:layout_marginTop="1dp"
+                            android:src="@drawable/ic_box" />
+
+                        <TextView
+                            android:id="@+id/labelTotalStok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-25dp"
+                            android:fontFamily="@font/poppinsregular"
+                            android:gravity="center"
+                            android:text="Kelola Bahan"
+                            android:textColor="@color/grey"
+                            android:layout_marginStart="50dp"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/valueTotalStok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="-50dp"
+                            android:text="24"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@android:color/black"
+                            android:textSize="23sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/subTotalStok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginStart="-36dp"
+                            android:text="3 Kategori"
+                            android:textColor="#666666"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Kotak Stok Menipis -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardStokMenipis"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeColor="#CCCCCC"
+                    app:strokeWidth="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iconStokMenipis"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="-50dp"
+                            android:layout_marginTop="1dp"
+                            android:src="@drawable/ic_warning" />
+
+                        <TextView
+                            android:id="@+id/labelStokMenipis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
+                            android:fontFamily="@font/poppinsregular"
+                            android:gravity="center"
+                            android:text="Stok Menipis"
+                            android:layout_marginTop="-25dp"
+                            android:textColor="@color/grey"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/valueStokMenipis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="-50dp"
+                            android:text="3"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@android:color/black"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/subStokMenipis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginStart="-19dp"
+                            android:text="Perlu Restock"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+            <!-- Header untuk Bumbu Persentase -->
+            <TextView
+                android:id="@+id/headerBumbuPersentase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bahan Baku Persentase"
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="-5dp"/>
+
+            <!-- RecyclerView untuk daftar Bumbu Persentase -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewBumbuPersentase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Header untuk Bahan Baku -->
+            <TextView
+                android:id="@+id/headerBahanBaku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bahan Baku"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="23dp"
+                android:layout_marginBottom="-5dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/black"
+                android:layout_marginTop="-7dp" />
+
+            <!-- RecyclerView untuk daftar Bahan Baku -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewBahanBaku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button untuk Tambah Stok -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnTambahStok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_plus"
+        app:backgroundTint="@color/primaryColor"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="365dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
+    android:layout_marginStart="3dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="10dp"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Nama Bahan -->
+        <TextView
+            android:id="@+id/tvNamaBahan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="Ayam"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Stok & Satuan -->
+        <TextView
+            android:id="@+id/tvStokDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stok: 8 pcs"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/poppinsregular"
+            android:layout_below="@id/tvNamaBahan"
+            android:layout_alignStart="@id/tvNamaBahan"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Progress Bar dengan Indikator Warna -->
+        <ProgressBar
+            android:id="@+id/progressStok"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_below="@id/tvStokDetail"
+            android:layout_marginTop="8dp"
+            android:progress="15"
+            android:max="100"
+            android:progressDrawable="@drawable/progress_bar_stok"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -54,8 +54,6 @@ class TransactionAdapter(
 
     class HorizontalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val recyclerViewHorizontal: RecyclerView = itemView.findViewById(R.id.recyclerView_horizontal)
-
-
     }
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,9 +64,18 @@ class TransactionAdapter(
 
         fun bind(transaction: Transaction, clickListener: (Transaction) -> Unit, position: Int) {
             val menuItem = transaction.items.firstOrNull()
-            if (menuItem != null) {
-                Picasso.get().load(menuItem.gambar).into(imageViewMenu)
+
+            // Validasi sebelum memuat gambar
+            if (menuItem != null && !menuItem.gambar.isNullOrEmpty()) {
+                Picasso.get()
+                    .load(menuItem.gambar)
+                    .placeholder(R.drawable.placeholder_image) // Gambar default jika belum tersedia
+                    .into(imageViewMenu)
+            } else {
+                // Gunakan gambar placeholder jika path gambar null/kosong
+                imageViewMenu.setImageResource(R.drawable.placeholder_image)
             }
+
             textViewTransaction.text = "Transaksi ${position + 1}"
             textViewTotalPrice.text = "+ Rp ${Utils.formatCurrency(transaction.totalPrice)}"
             textViewTimestamp.text = formatTimestamp(transaction.timestamp)
@@ -79,10 +86,15 @@ class TransactionAdapter(
         }
 
         private fun formatTimestamp(timestamp: String): String {
-            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val date = format.parse(timestamp)
-            val newFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-            return newFormat.format(date)
+            return try {
+                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val date = format.parse(timestamp)
+                val newFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                newFormat.format(date)
+            } catch (e: Exception) {
+                "Invalid Date"
+            }
         }
     }
+
 }

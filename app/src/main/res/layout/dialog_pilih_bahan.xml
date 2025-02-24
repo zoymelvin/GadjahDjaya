@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <!-- Judul Dialog -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilih Bahan Baku"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"/>
+
+    <!-- RecyclerView Dibungkus Scroll agar tetap dalam dialog -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_bahan_baku"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:minHeight="300dp"/>
+
+    <!-- Tombol Tetap di Bawah -->
+    <Button
+        android:id="@+id/btn_tutup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutup"
+        android:textColor="@android:color/white"
+        android:background="@color/primaryColor"
+        android:layout_marginTop="12dp"/>
+</LinearLayout>

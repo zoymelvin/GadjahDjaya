@@ -1,61 +1,99 @@
-package com.app.gadjahdjaya
+package com.app.gadjahdjaya.ui.menu
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.gadjahdjaya.adapter.BahanBakuDibutuhkanAdapter
+import com.app.gadjahdjaya.databinding.FragmentTambahMenuBinding
+import com.app.gadjahdjaya.model.BahanBaku
+import com.app.gadjahdjaya.model.BahanBakuDibutuhkan
+import com.app.gadjahdjaya.model.MenuItem
+import com.google.firebase.database.*
+
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 class TambahMenuFragment : Fragment() {
 
+    private var _binding: FragmentTambahMenuBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var database: DatabaseReference
+    private lateinit var bahanDatabase: DatabaseReference
     private lateinit var storage: StorageReference
     private var imageUri: Uri? = null
     private lateinit var spinnerKategori: Spinner
-
-    private lateinit var imageView: ImageView
-    private lateinit var etNamaMenu: EditText
-    private lateinit var etHargaMenu: EditText
+    private lateinit var bahanAdapter: BahanBakuDibutuhkanAdapter
+    private val bahanDibutuhkanList = mutableListOf<BahanBakuDibutuhkan>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_tambah_menu, container, false)
+    ): View {
+        _binding = FragmentTambahMenuBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         database = FirebaseDatabase.getInstance().getReference("menuItems")
+        bahanDatabase = FirebaseDatabase.getInstance().getReference("bahanBaku")
         storage = FirebaseStorage.getInstance().reference.child("menuImages")
 
-        imageView = view.findViewById(R.id.iv_menu_image)
-        etNamaMenu = view.findViewById(R.id.et_nama_menu)
-        etHargaMenu = view.findViewById(R.id.et_harga_menu)
+        spinnerKategori = binding.spinnerKategori
 
-        val btnTambahGambar = view.findViewById<Button>(R.id.btn_tambah_gambar)
-        btnTambahGambar.setOnClickListener {
-            pilihGambarDariGaleri()
+        // ✅ Setup RecyclerView untuk bahan baku
+        binding.recyclerBahanBaku.layoutManager = LinearLayoutManager(requireContext())
+        bahanAdapter = BahanBakuDibutuhkanAdapter(bahanDibutuhkanList) { bahan ->
+            bahanDibutuhkanList.remove(bahan)
+            bahanAdapter.notifyDataSetChanged()
+        }
+        binding.recyclerBahanBaku.adapter = bahanAdapter
+
+        // ✅ Pilih gambar dari galeri
+        binding.btnTambahGambar.setOnClickListener { pilihGambarDariGaleri() }
+
+        // ✅ Tambahkan bahan baku
+        binding.btnTambahBahan.setOnClickListener {
+            val dialog = DialogPilihBahan { bahan, jumlah ->
+                // ✅ Pastikan kita menyimpan idBahan dari Firebase
+                val bahanRef = bahanDatabase.orderByChild("nama").equalTo(bahan.nama)
+                bahanRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (data in snapshot.children) {
+                                val idBahan = data.key ?: ""
+                                val bahanDipilih = BahanBakuDibutuhkan(
+                                    idBahan = idBahan,
+                                    namaBahan = bahan.nama,
+                                    jumlah = jumlah,
+                                    satuan = bahan.satuan
+                                )
+                                bahanDibutuhkanList.add(bahanDipilih)
+                                bahanAdapter.notifyDataSetChanged()
+                                break
+                            }
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(requireContext(), "Gagal mendapatkan ID bahan", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            dialog.show(parentFragmentManager, "DialogPilihBahan")
         }
 
-        view.findViewById<Button>(R.id.btn_simpan_menu).setOnClickListener {
-            simpanMenuKeFirebase()
-        }
-
-        spinnerKategori = view.findViewById(R.id.spinner_kategori)
-
-        return view
+        // ✅ Simpan menu ke Firebase
+        binding.btnSimpanMenu.setOnClickListener { simpanMenuKeFirebase() }
     }
 
     private fun pilihGambarDariGaleri() {
@@ -67,14 +105,15 @@ class TambahMenuFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_GALERI && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
-            imageView.setImageURI(imageUri) // Menampilkan gambar yang dipilih di ImageView
+            binding.ivMenuImage.setImageURI(imageUri)
         }
     }
 
     private fun simpanMenuKeFirebase() {
-        val namaMenu = etNamaMenu.text.toString()
-        val hargaMenu = etHargaMenu.text.toString()
+        val namaMenu = binding.etNamaMenu.text.toString()
+        val hargaMenu = binding.etHargaMenu.text.toString()
         val kategoriMenu = spinnerKategori.selectedItem.toString()
+        val deskripsiMenu = binding.etDeskripsiMenu.text.toString()
 
         if (namaMenu.isNotEmpty() && hargaMenu.isNotEmpty() && imageUri != null) {
             val menuId = database.push().key
@@ -90,48 +129,35 @@ class TambahMenuFragment : Fragment() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val downloadUri = task.result
-                            val menuItem = HashMap<String, Any>()
-                            menuItem["id"] = menuId
-                            menuItem["nama"] = namaMenu
-                            menuItem["harga"] = hargaMenu.toInt()
-                            menuItem["gambar"] = downloadUri.toString()
-                            menuItem["kategori"] = kategoriMenu
+                            val menuItem = MenuItem(
+                                id = menuId,
+                                nama = namaMenu,
+                                harga = hargaMenu.toInt(),
+                                gambar = downloadUri.toString(),
+                                kategori = kategoriMenu,
+                                deskripsi = deskripsiMenu,
+                                bahanBakuDibutuhkan = bahanDibutuhkanList
+                            )
 
                             database.child(menuId).setValue(menuItem)
                                 .addOnSuccessListener {
-                                    if (isAdded) {
-                                        Toast.makeText(requireContext(), "Menu berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                                    }
-
-                                    // Perbarui data di fragment menu setelah menambahkan menu baru
-                                    val menuFragment = MenuFragment()
-                                    parentFragmentManager.beginTransaction()
-                                        .replace(R.id.fragment_container, menuFragment)
-                                        .commit()
+                                    Toast.makeText(requireContext(), "Menu berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                    parentFragmentManager.popBackStack()
                                 }
-                                .addOnFailureListener { e ->
-                                    if (isAdded) {
-                                        Toast.makeText(requireContext(), "Gagal menambahkan menu: ${e.message}", Toast.LENGTH_SHORT).show()
-                                    }
+                                .addOnFailureListener {
+                                    Toast.makeText(requireContext(), "Gagal menyimpan menu!", Toast.LENGTH_SHORT).show()
                                 }
-
-                        } else {
-                            if (isAdded) {
-                                Toast.makeText(requireContext(), "Gagal mendapatkan URL gambar", Toast.LENGTH_SHORT).show()
-                            }
                         }
                     }
-                    .addOnFailureListener { e ->
-                        if (isAdded) {
-                            Toast.makeText(requireContext(), "Gagal mengunggah gambar: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-            } else {
-                Toast.makeText(requireContext(), "Gagal membuat ID menu", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(requireContext(), "Isi semua data dan pilih gambar!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

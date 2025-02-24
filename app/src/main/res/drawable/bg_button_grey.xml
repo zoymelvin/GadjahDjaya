@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Efek ketika tombol ditekan -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/grey2"/>
+            <stroke android:width="1dp" android:color="@color/grey2"/>
+        </shape>
+    </item>
+
+    <!-- Tampilan default tombol -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/grey2"/>
+            <stroke android:width="1dp" android:color="@color/grey2"/>
+        </shape>
+    </item>
+
+</selector>

@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+    <!-- Latar belakang lingkaran -->
+    <path
+        android:fillColor="#D3E3FD"
+        android:pathData="M25,0C11.192,0 0,11.192 0,25C0,38.808 11.192,50 25,50C38.808,50 50,38.808 50,25C50,11.192 38.808,0 25,0z" />
+
+    <!-- Garis Minus -->
+    <path
+        android:fillColor="#D3E3FD"
+        android:pathData="M13,24 L37,24 L37,26 L13,26 Z"
+        android:strokeWidth="1"
+        android:strokeColor="#1565C0"/>
+</vector>
+
+

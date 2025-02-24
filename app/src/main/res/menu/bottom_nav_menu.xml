@@ -22,8 +22,8 @@
         app:actionLayout="@layout/bottom_nav_item" />
 
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/navigation_bahanbaku"
         android:icon="@drawable/settings"
-        android:title="Settings"
+        android:title="Bahan Baku"
         app:actionLayout="@layout/bottom_nav_item" />
 </menu>

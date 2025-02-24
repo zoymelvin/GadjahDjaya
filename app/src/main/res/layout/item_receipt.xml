@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
+    <!-- Item Name -->
     <TextView
-        android:id="@+id/textview_menu_name"
+        android:id="@+id/tv_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="Menu Name"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:fontFamily="@font/poppinsregular"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:padding="4dp" />
+        android:textSize="12sp"
+        tools:text="Nasi Goreng Spesial" />
 
+    <!-- Item Price -->
     <TextView
-        android:id="@+id/textview_menu_quantity"
+        android:id="@+id/tv_item_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="X 0"
+        android:gravity="end"
         android:fontFamily="@font/poppinsregular"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:padding="4dp"
-        android:gravity="center" />
+        android:textSize="12sp"
+        tools:text="15,000" />
 
+    <!-- Item Quantity -->
     <TextView
-        android:id="@+id/textview_menu_price"
+        android:id="@+id/tv_item_quantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:fontFamily="@font/poppinsregular"
+        android:textSize="12sp"
+        tools:text="2" />
+
+    <!-- Item Total -->
+    <TextView
+        android:id="@+id/tv_item_total"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Rp 0"
         android:fontFamily="@font/poppinsregular"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:padding="4dp"
-        android:gravity="end" />
+        android:gravity="end"
+        android:textSize="12sp"
+        tools:text="30,000" />
 
 </LinearLayout>

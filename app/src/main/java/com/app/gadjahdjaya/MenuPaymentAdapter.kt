@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.gadjahdjaya.model.MenuItem
 import com.squareup.picasso.Picasso
 
 class MenuPaymentAdapter(

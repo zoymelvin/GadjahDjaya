@@ -1,68 +1,131 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_nama_menu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/search_box"
-        android:hint="Nama Menu"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:padding="10dp" />
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
-    <EditText
-        android:id="@+id/et_harga_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Harga Menu"
-        android:inputType="numberDecimal"
-        android:background="@drawable/search_box"
-        android:padding="10dp"
-        android:layout_marginBottom="16dp"/>
+        <!-- Nama Menu -->
+        <EditText
+            android:id="@+id/et_nama_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/search_box"
+            android:hint="Nama Menu"
+            android:inputType="text"
+            android:minHeight="50dp"
+            android:padding="12dp" />
 
-    <Spinner
-        android:id="@+id/spinner_kategori"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/search_box"
-        android:entries="@array/kategori_menu"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:prompt="@string/kategori_menu" />
+        <!-- Harga Menu -->
+        <EditText
+            android:id="@+id/et_harga_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Harga Menu"
+            android:inputType="numberDecimal"
+            android:background="@drawable/search_box"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
 
-    <ImageView
-        android:id="@+id/iv_menu_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_image"
-        android:scaleType="centerCrop"/>
+        <!-- Kategori Menu -->
+        <Spinner
+            android:id="@+id/spinner_kategori"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_box"
+            android:entries="@array/kategori_menu"
+            android:minHeight="50dp"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/btn_tambah_gambar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tambah Gambar"
-        android:textColor="@color/white"
-        android:background="@drawable/colorbutton"
-        android:padding="10dp"
-        android:layout_marginTop="8dp"/>
+        <!-- Deskripsi Menu -->
+        <EditText
+            android:id="@+id/et_deskripsi_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Deskripsi Menu"
+            android:inputType="textMultiLine"
+            android:minHeight="80dp"
+            android:maxLines="5"
+            android:background="@drawable/search_box"
+            android:padding="12dp"
+            android:gravity="top"
+            android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/btn_simpan_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Simpan Menu"
-        android:textColor="@color/white"
-        android:background="@drawable/colorbutton"
-        android:padding="10dp"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+        <!-- Upload Gambar Menu -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:background="@drawable/search_box">
+
+            <ImageView
+                android:id="@+id/iv_menu_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_image"
+                android:scaleType="centerCrop" />
+
+            <Button
+                android:id="@+id/btn_tambah_gambar"
+                android:layout_width="169dp"
+                android:layout_height="49dp"
+                android:text="Tambah Gambar"
+                android:layout_marginStart="92dp"
+                android:textColor="@color/white"
+                android:background="@drawable/colorbutton" />
+        </LinearLayout>
+
+        <!-- Daftar Bahan Baku yang Dibutuhkan -->
+        <TextView
+            android:id="@+id/tv_bahan_baku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bahan Baku yang Dibutuhkan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- RecyclerView untuk daftar bahan baku -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_bahan_baku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_box"
+            android:minHeight="120dp"
+            android:padding="8dp"/>
+
+        <!-- Tombol Tambah Bahan Baku -->
+        <Button
+            android:id="@+id/btn_tambah_bahan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tambah Bahan Baku"
+            android:textColor="@color/white"
+            android:background="@drawable/colorbutton"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Tombol Simpan -->
+        <Button
+            android:id="@+id/btn_simpan_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan Menu"
+            android:textColor="@color/white"
+            android:background="@drawable/colorbutton"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>

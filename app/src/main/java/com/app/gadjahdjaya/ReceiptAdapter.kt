@@ -1,4 +1,4 @@
-package com.app.gadjahdjaya
+package com.app.gadjahdjaya.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.gadjahdjaya.R
+import com.app.gadjahdjaya.model.MenuItem
+import java.text.NumberFormat
+import java.util.*
 
 class ReceiptAdapter(
     private val context: Context,
@@ -21,8 +25,9 @@ class ReceiptAdapter(
         val menuItem = receiptList[position]
 
         holder.menuName.text = menuItem.nama
-        holder.menuQuantity.text = "X ${menuItem.jumlah}"
-        holder.menuPrice.text = "Rp ${Utils.formatCurrency(menuItem.harga * menuItem.jumlah)}"
+        holder.menuPrice.text = formatCurrency(menuItem.harga)
+        holder.menuQuantity.text = menuItem.jumlah.toString()
+        holder.menuTotal.text = formatCurrency(menuItem.harga * menuItem.jumlah)
     }
 
     override fun getItemCount(): Int {
@@ -30,8 +35,17 @@ class ReceiptAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val menuName: TextView = itemView.findViewById(R.id.textview_menu_name)
-        val menuQuantity: TextView = itemView.findViewById(R.id.textview_menu_quantity)
-        val menuPrice: TextView = itemView.findViewById(R.id.textview_menu_price)
+        val menuName: TextView = itemView.findViewById(R.id.tv_item_name)
+        val menuPrice: TextView = itemView.findViewById(R.id.tv_item_price)
+        val menuQuantity: TextView = itemView.findViewById(R.id.tv_item_quantity)
+        val menuTotal: TextView = itemView.findViewById(R.id.tv_item_total)
+    }
+
+    /**
+     * ✅ **Format angka ke Rupiah**
+     */
+    private fun formatCurrency(amount: Int): String {
+        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+        return format.format(amount).replace("Rp", "Rp ")
     }
 }

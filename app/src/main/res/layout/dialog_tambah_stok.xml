@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Nama Bahan Baku -->
+    <TextView
+        android:id="@+id/txtNamaBahan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama Bahan Baku"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppinsmedium"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/black"/>
+
+    <!-- Stok Saat Ini -->
+    <TextView
+        android:id="@+id/txtStokSaatIni"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stok saat ini: 0 pcs"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingBottom="8dp"/>
+
+    <!-- Input Jumlah Stok Tambahan -->
+    <EditText
+        android:id="@+id/inputJumlahTambah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukkan jumlah tambahan"
+        android:inputType="number"
+        android:fontFamily="@font/poppinsmedium"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:background="@android:drawable/editbox_background"/>
+
+    <!-- Tombol Tambah & Batal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnBatal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Batal"
+            android:fontFamily="@font/poppinsbold"
+            android:backgroundTint="@color/grey"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnTambah"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tambah"
+            android:fontFamily="@font/poppinsbold"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+</LinearLayout>

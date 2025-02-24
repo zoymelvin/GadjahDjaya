@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="GadjahDjaya">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-21T03:46:34.931353500Z">
+        <DropdownSelection timestamp="2025-02-22T21:34:51.164037600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Dash\.android\avd\Pixel_8_API_29.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Dash\.android\avd\Pixel_6_API_31.avd" />
             </handle>
           </Target>
         </DropdownSelection>
