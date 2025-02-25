@@ -76,7 +76,11 @@ class StokBahanBakuFragment : Fragment() {
                         if (bahanMap != null) {
                             val bahan = parseBahanBaku(data.key ?: "", bahanMap)
                             if (bahan.kategori.equals("bumbu halus", true) ||
-                                bahan.kategori.equals("kecap", true)) {
+                                bahan.kategori.equals("kecap", true) ||
+                                bahan.kategori.equals("protein", true) ||
+                                bahan.kategori.equals("mie", true) ||
+                                bahan.kategori.equals("sayur", true) ||
+                                bahan.kategori.equals("minyak goreng", true)) {
                                 kategoriMap.getOrPut(bahan.kategori) { mutableListOf() }.add(bahan)
                                 bahanPersentaseList.add(bahan)
                             } else {

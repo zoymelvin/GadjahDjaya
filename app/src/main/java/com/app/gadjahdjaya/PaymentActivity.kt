@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.IOException
+import java.text.DecimalFormat
 
 class PaymentActivity : AppCompatActivity(), MenuPaymentAdapter.OnItemClickListener {
 
@@ -105,8 +106,14 @@ class PaymentActivity : AppCompatActivity(), MenuPaymentAdapter.OnItemClickListe
 
     private fun updateTotalPrice() {
         totalPrice = cartList.sumOf { it.harga * it.jumlah }
-        totalPriceTextView.text = "Total: Rp $totalPrice"
+        totalPriceTextView.text = "Total: " + formatCurrency(totalPrice)
     }
+
+    private fun formatCurrency(amount: Int): String {
+        val formatter = DecimalFormat("#,###")
+        return "Rp " + formatter.format(amount).replace(",", ".")
+    }
+
 
     private fun navigateToConfirmPayment() {
         val intent = Intent(this, KonfirmasiPaymentActivity::class.java)

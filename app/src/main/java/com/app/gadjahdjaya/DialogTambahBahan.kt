@@ -28,7 +28,7 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
         super.onViewCreated(view, savedInstanceState)
 
         // ✅ Setup spinner kategori
-        val kategoriList = listOf("bumbu halus", "kecap", "lainnya")
+        val kategoriList = listOf("bumbu halus", "kecap", "protein" ,"mie", "sayur", "minyak goreng", "lainnya")
         val kategoriAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, kategoriList)
         binding.spinnerKategori.adapter = kategoriAdapter
 

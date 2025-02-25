@@ -46,42 +46,57 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
         totalHarga = intent.getIntExtra("totalPrice", 0)
         cartList = intent.getParcelableArrayListExtra("cartItems") ?: listOf()
 
-        // Set total harga ke UI dalam format Rupiah
+        // Set total harga ke UI dengan format Rupiah
         txtTotalPrice.text = formatCurrency(totalHarga)
 
-        // Set nilai tombol berdasarkan harga
-        updateUangLainButtons()
-
-        // Listener jumlah uang
+        // Format input jumlah uang secara otomatis dengan titik (.)
         inputJumlahUang.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString() != current) {
+                    inputJumlahUang.removeTextChangedListener(this)
+
+                    val cleanString = s.toString().replace("[Rp,.]".toRegex(), "")
+                    val parsed = cleanString.toDoubleOrNull() ?: 0.0
+                    val formatted = formatCurrencyPlain(parsed.toInt())
+
+                    current = formatted
+                    inputJumlahUang.setText(formatted)
+                    inputJumlahUang.setSelection(formatted.length)
+
+                    inputJumlahUang.addTextChangedListener(this)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
                 hitungKembalian()
             }
-            override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Tombol uang pas
+        /// Set tombol uang pas dan uang lainnya
+        updateUangLainButtons()
+
         btnUangPas.setOnClickListener {
             inputJumlahUang.setText(formatCurrencyPlain(totalHarga))
             hitungKembalian()
         }
 
-        // Tombol uang pecahan pertama
         btnUangLain1.setOnClickListener {
             val uangTerdekat = getUangTerdekat(totalHarga)
             inputJumlahUang.setText(formatCurrencyPlain(uangTerdekat))
             hitungKembalian()
         }
 
-        // Tombol uang pecahan kedua
         btnUangLain2.setOnClickListener {
             val uangLebihTinggi = getUangLebihTinggi(totalHarga)
             inputJumlahUang.setText(formatCurrencyPlain(uangLebihTinggi))
             hitungKembalian()
         }
 
-        // Konfirmasi pembayaran
+        // Tombol konfirmasi pembayaran
         btnKonfirmasi.setOnClickListener {
             if (validasiPembayaran()) {
                 prosesPembayaranTunai()
@@ -89,30 +104,6 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * ✅ Menghitung kembalian
-     */
-    private fun hitungKembalian() {
-        val jumlahUang = inputJumlahUang.text.toString().replace(".", "").toIntOrNull() ?: 0
-        val kembalian = jumlahUang - totalHarga
-        txtKembalianValue.text = formatCurrency(if (kembalian >= 0) kembalian else 0)
-    }
-
-    /**
-     * ✅ Validasi pembayaran sebelum konfirmasi
-     */
-    private fun validasiPembayaran(): Boolean {
-        val jumlahUang = inputJumlahUang.text.toString().replace(".", "").toIntOrNull() ?: 0
-        if (jumlahUang < totalHarga) {
-            Toast.makeText(this, "Jumlah uang kurang!", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        return true
-    }
-
-    /**
-     * ✅ Menyesuaikan tombol uang terdekat
-     */
     private fun updateUangLainButtons() {
         val uangTerdekat = getUangTerdekat(totalHarga)
         val uangLebihTinggi = getUangLebihTinggi(totalHarga)
@@ -144,6 +135,28 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
         return if (index != -1 && index + 1 < pecahan.size) pecahan[index + 1] else pecahan.last()
     }
 
+
+    /**
+     * ✅ Menghitung kembalian
+     */
+    private fun hitungKembalian() {
+        val jumlahUang = inputJumlahUang.text.toString().replace("[Rp,.]".toRegex(), "").toIntOrNull() ?: 0
+        val kembalian = jumlahUang - totalHarga
+        txtKembalianValue.text = formatCurrency(if (kembalian >= 0) kembalian else 0)
+    }
+
+    /**
+     * ✅ Validasi pembayaran sebelum konfirmasi
+     */
+    private fun validasiPembayaran(): Boolean {
+        val jumlahUang = inputJumlahUang.text.toString().replace("[Rp,.]".toRegex(), "").toIntOrNull() ?: 0
+        if (jumlahUang < totalHarga) {
+            Toast.makeText(this, "Jumlah uang kurang!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
     /**
      * 🚀 **Proses pembayaran tunai & simpan transaksi ke Firebase**
      */
@@ -153,10 +166,9 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         val cashierId = currentUser?.uid ?: "unknown"
-        val dineOption = intent.getStringExtra("dineOption") ?: "Dine In" // ✅ Ambil data dari intent
-        val totalPesanan = intent.getIntExtra("totalPesanan", 0) // ✅ Ambil total pesanan
+        val dineOption = intent.getStringExtra("dineOption") ?: "Dine In"
 
-        Log.d("SwitchDebug", "Menyimpan dineOption ke Firebase: $dineOption") // 🔥 Debugging
+        val totalPesanan = cartList.sumOf { it.jumlah }
 
         val transaksi = mapOf(
             "order_id" to transaksiId,
@@ -164,7 +176,7 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
             "timestamp" to timestamp,
             "payment_method" to "cash",
             "status" to "success",
-            "cashier_id" to cashierId,  // ✅ Simpan ID kasir
+            "cashier_id" to cashierId,
             "dine_option" to dineOption,
             "items" to cartList.map { menuItem ->
                 mapOf(
@@ -180,26 +192,73 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
 
         database.child(transaksiId).setValue(transaksi).addOnSuccessListener {
             Toast.makeText(this, "Pembayaran Berhasil!", Toast.LENGTH_SHORT).show()
-            kurangiStokBahan()  // ✅ Kurangi stok bahan seperti biasa
+            kurangiStokBahan()
 
             if (dineOption == "Take Away") {
-                kurangiStokSendokGarpu(totalPesanan) // ✅ Kurangi stok sendok garpu
+                kurangiStokSendokGarpu(totalPesanan)
             }
 
-            pindahKeReceipt(transaksiId, dineOption)  // ✅ Kirim ke ReceiptActivity
+            pindahKeReceipt(transaksiId, dineOption)
         }.addOnFailureListener {
             Toast.makeText(this, "Gagal menyimpan transaksi!", Toast.LENGTH_SHORT).show()
         }
     }
 
     /**
-     * ✅ **Kurangi stok bahan baku "Sendok & Garpu" untuk takeaway**
+     * ✅ **Kurangi stok bahan baku & catat log stok per hari**
+     */
+    private fun kurangiStokBahan() {
+        val bahanDatabase = FirebaseDatabase.getInstance().reference.child("bahanBaku")
+        val logDatabase = FirebaseDatabase.getInstance().reference.child("log_stok")
+
+        val tanggalHariIni = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) // Format: 2025-02-24
+
+        for (menuItem in cartList) {
+            for (bahan in menuItem.bahanBakuDibutuhkan) {
+                val bahanRef = bahanDatabase.child(bahan.idBahan)
+                val logRef = logDatabase.child(tanggalHariIni).child("pengeluaran").child(bahan.idBahan)
+
+                bahanRef.get().addOnSuccessListener { snapshot ->
+                    if (snapshot.exists()) {
+                        val stokSaatIni = snapshot.child("stok").getValue(Double::class.java) ?: 0.0
+                        val stokBaru = (stokSaatIni - (bahan.jumlah * menuItem.jumlah)).coerceAtLeast(0.0)
+
+                        bahanRef.child("stok").setValue(stokBaru).addOnSuccessListener {
+                            Log.d("StockUpdate", "✅ Stok ${bahan.namaBahan} diperbarui: $stokSaatIni → $stokBaru")
+
+                            // 🚀 **Perbarui Log Stok**
+                            logRef.get().addOnSuccessListener { logSnapshot ->
+                                val pemakaianSebelumnya = logSnapshot.child("total_pemakaian").getValue(Double::class.java) ?: 0.0
+                                val pemakaianBaru = pemakaianSebelumnya + (bahan.jumlah * menuItem.jumlah)
+
+                                val logData = HashMap<String, Any>()
+                                logData["nama"] = bahan.namaBahan
+                                logData["total_pemakaian"] = pemakaianBaru
+                                logData["satuan"] = snapshot.child("satuan").getValue(String::class.java) ?: "unit"
+
+                                logRef.setValue(logData).addOnSuccessListener {
+                                    Log.d("LogUpdate", "✅ Log Stok ${bahan.namaBahan} diperbarui: $pemakaianSebelumnya → $pemakaianBaru")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * ✅ **Kurangi stok bahan baku "Sendok & Garpu" dan "Kertas Nasi" untuk Takeaway**
      */
     private fun kurangiStokSendokGarpu(totalPesanan: Int) {
         val bahanDatabase = FirebaseDatabase.getInstance().reference.child("bahanBaku")
 
-        val sendokGarpuId = "-OJACyMD5f1IXG3C8h86" // ✅ ID dari Firebase
+        val sendokGarpuId = "-OJACyMD5f1IXG3C8h86" // ✅ ID Sendok & Garpu dari Firebase
+        val kertasNasiId = "-OIT9Mu862KCenndpRwi"  // ✅ ID Kertas Nasi dari Firebase
 
+        // 🔹 Mengurangi stok Sendok & Garpu
         bahanDatabase.child(sendokGarpuId).get().addOnSuccessListener { snapshot ->
             if (!snapshot.exists()) {
                 Log.e("StockUpdate", "❌ Data Sendok & Garpu tidak ditemukan di Firebase!")
@@ -221,64 +280,41 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
         }.addOnFailureListener {
             Log.e("StockUpdate", "❌ Gagal mengambil data stok Sendok & Garpu dari Firebase!")
         }
-    }
 
+        // 🔹 Mengurangi stok Kertas Nasi
+        bahanDatabase.child(kertasNasiId).get().addOnSuccessListener { snapshot ->
+            if (!snapshot.exists()) {
+                Log.e("StockUpdate", "❌ Data Kertas Nasi tidak ditemukan di Firebase!")
+                return@addOnSuccessListener
+            }
 
-    /**
-     * 🚀 **Kurangi stok bahan baku setelah transaksi sukses**
-     */
-    private fun kurangiStokBahan() {
-        val bahanDatabase = FirebaseDatabase.getInstance().reference.child("bahanBaku")
-        val batchUpdates = mutableMapOf<String, Double>()
+            val stokSaatIni = snapshot.child("stok").getValue(Double::class.java) ?: 0.0
+            val stokBaru = (stokSaatIni - totalPesanan).coerceAtLeast(0.0) // Pastikan stok tidak negatif
 
-        for (menuItem in cartList) {
-            for (bahan in menuItem.bahanBakuDibutuhkan) {
-                if (bahan.idBahan.isBlank()) {
-                    Log.e("StockUpdate", "❌ ID bahan kosong untuk ${bahan.namaBahan}, tidak bisa update stok!")
-                    continue
+            Log.d("StockUpdate", "🛠️ Mengurangi stok Kertas Nasi: $stokSaatIni - $totalPesanan = $stokBaru")
+
+            bahanDatabase.child(kertasNasiId).child("stok").setValue(stokBaru)
+                .addOnSuccessListener {
+                    Log.d("StockUpdate", "✅ Stok Kertas Nasi diperbarui: $stokSaatIni → $stokBaru")
                 }
-
-                val stokDikurangi = bahan.jumlah * menuItem.jumlah
-                batchUpdates[bahan.idBahan] = (batchUpdates[bahan.idBahan] ?: 0.0) - stokDikurangi
-            }
-        }
-
-        if (batchUpdates.isEmpty()) {
-            return
-        }
-
-        bahanDatabase.get().addOnSuccessListener { snapshot ->
-            val updates = mutableMapOf<String, Any>()
-            for ((bahanId, perubahanStok) in batchUpdates) {
-                val stokSaatIni = snapshot.child(bahanId).child("stok").getValue(Double::class.java) ?: return@addOnSuccessListener
-                updates["$bahanId/stok"] = (stokSaatIni + perubahanStok).coerceAtLeast(0.0)
-            }
-
-            if (updates.isNotEmpty()) {
-                bahanDatabase.updateChildren(updates)
-            }
+                .addOnFailureListener {
+                    Log.e("StockUpdate", "❌ Gagal memperbarui stok Kertas Nasi!")
+                }
+        }.addOnFailureListener {
+            Log.e("StockUpdate", "❌ Gagal mengambil data stok Kertas Nasi dari Firebase!")
         }
     }
+
+
 
     private fun pindahKeReceipt(transaksiId: String, dineOption: String) {
         val intent = Intent(this, ReceiptActivity::class.java)
         intent.putExtra("transactionId", transaksiId)
         intent.putExtra("dineOption", dineOption)
         startActivity(intent)
-        finish() // Tutup halaman pembayaran
+        finish()
     }
 
-    /**
-     * ✅ Format angka ke Rupiah
-     */
-    private fun formatCurrency(amount: Int): String {
-        return DecimalFormat("#,###").format(amount).replace(",", ".")
-    }
-
-    /**
-     * ✅ Format angka tanpa simbol mata uang (plain)
-     */
-    private fun formatCurrencyPlain(amount: Int): String {
-        return DecimalFormat("#,###").format(amount).replace(",", ".")
-    }
+    private fun formatCurrency(amount: Int) = "Rp " + DecimalFormat("#,###").format(amount).replace(",", ".")
+    private fun formatCurrencyPlain(amount: Int) = DecimalFormat("#,###").format(amount).replace(",", ".")
 }
