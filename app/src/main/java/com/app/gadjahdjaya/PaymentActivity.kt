@@ -82,7 +82,7 @@ class PaymentActivity : AppCompatActivity(), MenuPaymentAdapter.OnItemClickListe
             navigateToConfirmPayment()
         }
 
-        // **Navigasi ke Pembayaran Online**
+        // **Navigasi ke Pembayaran Onlin**
         btnOnline.setOnClickListener {
             initiateOnlinePayment()
         }
