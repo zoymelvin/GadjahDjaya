@@ -13,8 +13,11 @@
     <color name="grey2">#F3F4F6</color>
     <color name="blue_primary">#2563EB</color>
     <color name="green">#34D399</color>
+    <color name="green2">#4CAF50</color>
     <color name="red">#FF3D00</color>
-    <color name="brown">#3B1F11</color>
+    <color name="brown">#5C4125</color>
+    <color name="yellow">#F5F05F</color>
+    <color name="orange">#F9932C</color>
     <color name="colorbuton">#5692CA</color>
     <color name="colorbuton2">#F3F4F6</color>
     <color name="bottom_nav_icon_color">#FFFFFF</color>

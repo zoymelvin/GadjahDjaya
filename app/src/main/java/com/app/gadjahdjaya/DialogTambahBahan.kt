@@ -9,13 +9,16 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.app.gadjahdjaya.databinding.DialogTambahBahanBinding
 import com.app.gadjahdjaya.model.BahanBaku
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment() {
 
     private var _binding: DialogTambahBahanBinding? = null
     private val binding get() = _binding!!
-    private val database = FirebaseDatabase.getInstance().reference.child("bahanBaku")
+    private val database = FirebaseDatabase.getInstance().reference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,7 +31,7 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
         super.onViewCreated(view, savedInstanceState)
 
         // ✅ Setup spinner kategori
-        val kategoriList = listOf("bumbu halus", "kecap", "protein" ,"mie", "sayur", "minyak goreng", "lainnya")
+        val kategoriList = listOf("bumbu halus", "kecap", "protein", "mie", "sayur", "minyak goreng", "lainnya")
         val kategoriAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, kategoriList)
         binding.spinnerKategori.adapter = kategoriAdapter
 
@@ -50,7 +53,7 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
     }
 
     /**
-     * ✅ Fungsi untuk menyimpan bahan ke Firebase
+     * ✅ Fungsi untuk menyimpan bahan ke Firebase & mencatat log pemasukan
      */
     private fun simpanBahanKeDatabase() {
         val nama = binding.etNamaBahan.text.toString().trim()
@@ -64,24 +67,52 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
         }
 
         // ✅ Konversi stok agar tetap mendukung angka desimal
-        val stokAwal = stokInput.toDoubleOrNull() ?: 0.0
+        val stokTambahan = stokInput.toDoubleOrNull() ?: 0.0
+        if (stokTambahan <= 0) {
+            Toast.makeText(requireContext(), "Stok harus lebih dari 0!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val tanggalMasuk = bahan?.tanggalMasuk ?: System.currentTimeMillis().toString()
 
-        val updatedBahan = BahanBaku(
-            id = bahan?.id ?: database.push().key!!,  // ✅ Pastikan ID tidak kosong
-            nama = nama,
-            kategori = kategori,
-            stok = stokAwal,
-            stokMaksimum = bahan?.stokMaksimum ?: stokAwal, // Jika edit, gunakan stokMaksimum sebelumnya
-            satuan = satuan,
-            tanggalMasuk = tanggalMasuk
-        )
+        val bahanRef = database.child("bahanBaku").child(bahan?.id ?: database.child("bahanBaku").push().key!!)
+        val logRef = database.child("log_stok").child(getCurrentDate()).child("pemasukan").push()
 
-        database.child(updatedBahan.id).setValue(updatedBahan).addOnSuccessListener {
-            Toast.makeText(requireContext(), "Bahan berhasil disimpan!", Toast.LENGTH_SHORT).show()
-            dismiss()
+        // 🔹 **Update stok di `bahan_baku`**
+        bahanRef.get().addOnSuccessListener { snapshot ->
+            val stokSaatIni = snapshot.child("stok").getValue(Double::class.java) ?: 0.0
+            val stokBaru = stokSaatIni + stokTambahan
+
+            val updatedBahan = BahanBaku(
+                id = bahan?.id ?: bahanRef.key!!,
+                nama = nama,
+                kategori = kategori,
+                stok = stokBaru,
+                stokMaksimum = bahan?.stokMaksimum ?: stokBaru,
+                satuan = satuan,
+                tanggalMasuk = tanggalMasuk
+            )
+
+            bahanRef.setValue(updatedBahan).addOnSuccessListener {
+                // 🔹 **Tambahkan log pemasukan ke `log_stok`**
+                val logData = mapOf(
+                    "nama" to nama,
+                    "jumlah" to stokTambahan,
+                    "satuan" to satuan,
+                    "waktu" to getCurrentTime(),
+                )
+
+                logRef.setValue(logData).addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Bahan berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }.addOnFailureListener {
+                    Toast.makeText(requireContext(), "Gagal mencatat log pemasukan!", Toast.LENGTH_SHORT).show()
+                }
+            }.addOnFailureListener {
+                Toast.makeText(requireContext(), "Gagal menyimpan bahan!", Toast.LENGTH_SHORT).show()
+            }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Gagal menyimpan bahan!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Gagal mengambil data bahan!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,6 +125,22 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
         } else {
             stok.toString()  // Jika ada desimal, biarkan seperti itu (1.5 → "1.5")
         }
+    }
+
+    /**
+     * ✅ Fungsi mendapatkan tanggal saat ini dalam format `YYYY-MM-DD`
+     */
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
+
+    /**
+     * ✅ Fungsi mendapatkan waktu saat ini dalam format `HH:mm:ss`
+     */
+    private fun getCurrentTime(): String {
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        return timeFormat.format(Date())
     }
 
     override fun onStart() {

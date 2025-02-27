@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:text="Statistik Stok"
+                    android:text="Kelola Bahan"
                     android:fontFamily="@font/poppinsmedium"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -65,17 +65,30 @@
                     android:orientation="horizontal"
                     android:padding="10dp">
 
+                    <!-- Tombol Tambah Bahan -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_add_stock"
-                        android:padding="12dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
+                        android:padding="12dp"
                         android:text="Tambah Bahan" />
+
+                    <!-- Tombol Unduh CSV -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUnduhCsv"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="12dp"
+                        android:text="Unduh CSV" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
 
             <!-- Stock Distribution Card -->
             <androidx.cardview.widget.CardView
@@ -102,6 +115,16 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+                    <ImageView
+                        android:id="@+id/btnDatePicker"
+                        android:layout_width="40dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_calendar"
+                        android:layout_marginStart="286dp"
+                        android:layout_marginTop="-29dp"
+                        android:layout_marginBottom="-10dp"
+                        android:contentDescription="Pilih Tanggal"/>
+
                     <!-- Pie Chart Container -->
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pie_chart"
@@ -112,106 +135,262 @@
 
                     <!-- Legend -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
+                        <!-- Layout Kiri (4 Kategori) -->
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:padding="8dp">
+                            android:layout_marginEnd="16dp"
+                            android:orientation="vertical">
 
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:background="@color/green" />
-
-                            <TextView
-                                android:layout_width="0dp"
+                            <!-- Bumbu Halus -->
+                            <LinearLayout
+                                android:layout_width="166dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="Bumbu halus"
-                                android:textColor="@color/black"
-                                android:textSize="11dp"
-                                tools:ignore="TextSizeCheck" />
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/green2" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Bumbu Halus"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/bumbu"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
+
+                            <!-- Kecap -->
+                            <LinearLayout
+                                android:layout_width="166dp"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="45%"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
-                                tools:ignore="TextSizeCheck" />
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/brown" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Kecap"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/kecap"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
+
+                            <!-- Minyak Goreng -->
+                            <LinearLayout
+                                android:layout_width="166dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/yellow" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Minyak Goreng"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/goreng"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
+
+                            <!-- Sayur -->
+                            <LinearLayout
+                                android:layout_width="166dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/green" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Sayur"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/sayur"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
                         </LinearLayout>
 
+                        <!-- Layout Kanan (3 Kategori) -->
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:padding="8dp"
-                            tools:ignore="ExtraText">
+                            android:orientation="vertical">
 
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:background="@color/brown" />
-
-                            <TextView
-                                android:layout_width="0dp"
+                            <!-- Mie -->
+                            <LinearLayout
+                                android:layout_width="166dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="Kecap"
-                                android:textColor="@color/black"
-                                android:textSize="11dp"
-                                tools:ignore="TextSizeCheck" />/>
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/orange" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Mie"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/mie"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
+
+                            <!-- Protein -->
+                            <LinearLayout
+                                android:layout_width="166dp"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="35%"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
-                                tools:ignore="TextSizeCheck" />
-                        </LinearLayout>
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:padding="8dp">
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/red" />
 
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:background="@color/blue_primary" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Protein"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
 
-                            <TextView
-                                android:layout_width="0dp"
+                                <TextView
+                                    android:id="@+id/protein"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
+
+                            <!-- Lainnya -->
+                            <LinearLayout
+                                android:layout_width="166dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="Lainya"
-                                android:textColor="@color/black"
-                                android:textSize="11dp"
-                                tools:ignore="TextSizeCheck" />
+                                android:gravity="center_vertical"
+                                android:padding="8dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppinsmedium"
-                                android:text="20%"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
-                                tools:ignore="TextSizeCheck" />
+                                <View
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:background="@color/blue_primary" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="Lainnya"
+                                    android:textColor="@color/black"
+                                    android:textSize="11dp"
+                                    tools:ignore="TextSizeCheck" />
+
+                                <TextView
+                                    android:id="@+id/lain"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    android:text="0%"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    tools:ignore="TextSizeCheck" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -261,6 +440,7 @@
                             tools:ignore="TextSizeCheck" />
 
                         <TextView
+                            android:id="@+id/total_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
@@ -281,6 +461,7 @@
                             tools:ignore="TextSizeCheck" />
 
                         <TextView
+                            android:id="@+id/total_kategori"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
@@ -303,6 +484,7 @@
                             tools:ignore="TextSizeCheck" />
 
                         <TextView
+                            android:id="@+id/stok_menipis"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.app.gadjahdjaya.databinding.DialogTambahStokBinding
 import com.app.gadjahdjaya.model.BahanBaku
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +17,7 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
 
     private var _binding: DialogTambahStokBinding? = null
     private val binding get() = _binding!!
-    private val database = FirebaseDatabase.getInstance().reference.child("bahanBaku")
+    private val database = FirebaseDatabase.getInstance().reference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,18 +29,14 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // **✅ Perbaikan Format Stok agar tidak dalam format desimal jika bilangan bulat**
-        val stokFormatted = if (bahan.stok % 1 == 0.0) {
-            bahan.stok.toInt().toString() // Jika bilangan bulat, hapus ".0"
-        } else {
-            bahan.stok.toString() // Jika ada desimal, tetap tampilkan
-        }
+        // ✅ Pastikan stok tampil dalam format yang benar (tanpa ".0" jika integer)
+        val stokFormatted = if (bahan.stok % 1 == 0.0) bahan.stok.toInt().toString() else bahan.stok.toString()
 
-        // **✅ Tampilkan nama bahan & stok saat ini**
+        // ✅ Tampilkan informasi stok saat ini
         binding.txtNamaBahan.text = bahan.nama
         binding.txtStokSaatIni.text = "Stok saat ini: $stokFormatted ${bahan.satuan}"
 
-        // **🔹 Tombol Tambah Stok**
+        // 🔹 Tombol Tambah Stok
         binding.btnTambah.setOnClickListener {
             val jumlahTambahStr = binding.inputJumlahTambah.text.toString().trim()
 
@@ -48,7 +45,7 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
                 return@setOnClickListener
             }
 
-            val jumlahTambah = jumlahTambahStr.toIntOrNull() ?: 0
+            val jumlahTambah = jumlahTambahStr.toDoubleOrNull() ?: 0.0
             if (jumlahTambah > 0) {
                 tambahStok(jumlahTambah)
             } else {
@@ -56,39 +53,69 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
             }
         }
 
-        // **🔹 Tombol Batal**
+        // 🔹 Tombol Batal
         binding.btnBatal.setOnClickListener {
             dismiss()
         }
     }
 
-    private fun tambahStok(jumlahTambah: Int) {
+    /**
+     * ✅ **Fungsi untuk menambah stok & mencatat log pemasukan stok**
+     */
+    private fun tambahStok(jumlahTambah: Double) {
         val stokBaru = bahan.stok + jumlahTambah
         val stokMaksimumBaru = if (stokBaru > bahan.stokMaksimum) stokBaru else bahan.stokMaksimum
 
-        // **✅ Dapatkan tanggal & jam real-time**
-        val sdf = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-        val tanggalBaru = sdf.format(Date())
 
-        // **✅ Perbaikan Format Stok**
-        val stokBaruFormatted = if (stokBaru % 1 == 0.0) stokBaru.toInt() else stokBaru
-        val stokMaksimumFormatted = if (stokMaksimumBaru % 1 == 0.0) stokMaksimumBaru.toInt() else stokMaksimumBaru
+        // ✅ Referensi ke `bahan_baku` dan `log_stok`
+        val bahanRef = database.child("bahanBaku").child(bahan.id)
+        val logRef = database.child("log_stok").child(getCurrentDate()).child("pemasukan").push()
 
-        // **✅ Update ke Firebase**
+        // 🔹 **Update stok bahan baku**
         val updateData = mapOf(
-            "stok" to stokBaruFormatted,
-            "stokMaksimum" to stokMaksimumFormatted,
-            "tanggalMasuk" to tanggalBaru // **🕒 Update waktu**
+            "stok" to stokBaru,
+            "stokMaksimum" to stokMaksimumBaru,
+            "tanggalMasuk" to getCurrentTimestamp()
         )
 
-        database.child(bahan.id).updateChildren(updateData)
+        bahanRef.updateChildren(updateData)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Stok berhasil diperbarui!", Toast.LENGTH_SHORT).show()
-                dismiss()
+                // 🔹 **Tambahkan Log Pemasukan**
+                val logData = mapOf(
+                    "nama" to bahan.nama,
+                    "jumlah" to jumlahTambah,
+                    "satuan" to bahan.satuan,
+                    "waktu" to getCurrentTimestamp(),
+                )
+
+                logRef.setValue(logData)
+                    .addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Stok berhasil diperbarui!", Toast.LENGTH_SHORT).show()
+                        dismiss()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(), "Gagal mencatat log pemasukan!", Toast.LENGTH_SHORT).show()
+                    }
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Gagal memperbarui stok!", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    /**
+     * ✅ **Fungsi mendapatkan tanggal hari ini dalam format `YYYY-MM-DD`**
+     */
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
+
+    /**
+     * ✅ **Fungsi mendapatkan timestamp real-time dalam format `dd MMM yyyy HH:mm`**
+     */
+    private fun getCurrentTimestamp(): String {
+        val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 
     override fun onStart() {

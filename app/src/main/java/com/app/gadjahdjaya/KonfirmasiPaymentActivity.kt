@@ -235,6 +235,7 @@ class KonfirmasiPaymentActivity : AppCompatActivity() {
                                 logData["nama"] = bahan.namaBahan
                                 logData["total_pemakaian"] = pemakaianBaru
                                 logData["satuan"] = snapshot.child("satuan").getValue(String::class.java) ?: "unit"
+                                logData["kategori"] = snapshot.child("kategori").getValue(String::class.java) ?: "Lainnya"
 
                                 logRef.setValue(logData).addOnSuccessListener {
                                     Log.d("LogUpdate", "✅ Log Stok ${bahan.namaBahan} diperbarui: $pemakaianSebelumnya → $pemakaianBaru")
