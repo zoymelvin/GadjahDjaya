@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.gadjahdjaya.model.MenuItem
+import com.app.gadjahdjaya.model.Transaksi
+import com.app.gadjahdjaya.adapter.TransaksiHariAdapter
+import com.app.gadjahdjaya.ui.FragmentKeuangan
 import com.app.gadjahdjaya.ui.menu.MenuFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,10 +29,10 @@ class BerandaFragment : Fragment(), MenuAdapterBeranda.OnItemClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var transactionsRecyclerView: RecyclerView
     private lateinit var menuRecyclerView: RecyclerView
-    private lateinit var transactionAdapter: TransactionAdapter
+    private lateinit var transactionAdapter: TransaksiHariAdapter
     private lateinit var menuAdapter: MenuAdapterBeranda
 
-    private val transactionsList = mutableListOf<Transaction>()
+    private val transactionsList = mutableListOf<Transaksi>()
     private val menuList = mutableListOf<MenuItem>()
 
     override fun onCreateView(
@@ -82,9 +87,7 @@ class BerandaFragment : Fragment(), MenuAdapterBeranda.OnItemClickListener {
                         userNameTextView.text = name
                     }
 
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        // Handle possible errors.
-                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
                 })
         } else {
             userNameTextView.text = "Nama User"
@@ -95,48 +98,44 @@ class BerandaFragment : Fragment(), MenuAdapterBeranda.OnItemClickListener {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val todayDate = dateFormat.format(Date())
 
-        database.child("transactions")
-            .orderByChild("timestamp")
-            .startAt("$todayDate 00:00:00")
-            .endAt("$todayDate 23:59:59")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!isAdded) return
-                    var totalEarnings = 0
-                    transactionsList.clear()
+        database.child("transactions").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!isAdded) return
+                var totalEarnings = 0
+                transactionsList.clear()
 
-                    for (dataSnapshot in snapshot.children) {
-                        val transaction = dataSnapshot.getValue(Transaction::class.java)
-                        if (transaction != null) {
-                            totalEarnings += transaction.totalPrice
-                            transactionsList.add(transaction)
+                for (category in snapshot.children) {
+                    for (dataSnapshot in category.children) {
+                        val orderId = dataSnapshot.child("order_id").getValue(String::class.java) ?: "Unknown"
+                        val timestamp = dataSnapshot.child("timestamp").getValue(String::class.java) ?: "Unknown"
+                        val grossAmount = dataSnapshot.child("gross_amount").getValue(Int::class.java) ?: 0
+
+                        if (timestamp.startsWith(todayDate)) {
+                            totalEarnings += grossAmount
+                            transactionsList.add(Transaksi(orderId, timestamp, grossAmount))
                         }
                     }
-
-                    // Sort transactions by timestamp in descending order
-                    transactionsList.sortByDescending { it.timestamp }
-
-                    // Only take the latest 3 transactions
-                    val latestTransactions = transactionsList.take(3)
-
-                    // Initialize adapter with latest transactions and item click listener
-                    transactionAdapter = TransactionAdapter(latestTransactions) { transaction ->
-                        // Handle item click here
-                    }
-                    transactionsRecyclerView.adapter = transactionAdapter
-
-                    totalEarningsTextView.text = "Rp ${Utils.formatCurrency(totalEarnings)}"
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle possible errors
-                }
-            })
+                transactionsList.sortByDescending { it.timestamp }
+                val latestTransactions = transactionsList.take(3)
+
+                transactionAdapter = TransaksiHariAdapter(latestTransactions)
+                transactionsRecyclerView.adapter = transactionAdapter
+
+                val symbols = DecimalFormatSymbols(Locale("id", "ID"))
+                symbols.groupingSeparator = '.'
+                val formatter = DecimalFormat("#,###", symbols)
+                totalEarningsTextView.text = "Rp ${formatter.format(totalEarnings)}"
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun fetchMenuItems() {
-        database.child("menuItems")
-            .orderByChild("timestamp")
+        database.child("menuItems").orderByChild("timestamp")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (!isAdded) return
@@ -148,31 +147,22 @@ class BerandaFragment : Fragment(), MenuAdapterBeranda.OnItemClickListener {
                         }
                     }
 
-                    // Sort menus by timestamp in descending order
                     menuList.sortByDescending { it.timestamp }
-
-                    // Initialize adapter with menu list and item click listener
                     menuAdapter = MenuAdapterBeranda(requireContext(), menuList, this@BerandaFragment)
                     menuRecyclerView.adapter = menuAdapter
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle possible errors
-                }
+                override fun onCancelled(error: DatabaseError) {}
             })
     }
 
-    override fun onEditClick(menuItem: MenuItem) {
-        // Handle edit click here
-    }
+    override fun onEditClick(menuItem: MenuItem) {}
 
-    override fun onDeleteClick(menuItem: MenuItem) {
-        // Handle delete click here
-    }
+    override fun onDeleteClick(menuItem: MenuItem) {}
 
     private fun navigateToKeuanganFragment() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, KeuanganFragment())
+            .replace(R.id.fragment_container, FragmentKeuangan())
             .addToBackStack(null)
             .commit()
     }

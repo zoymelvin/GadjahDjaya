@@ -1,57 +1,98 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/et_nama_menu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nama Menu"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_harga_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Harga Menu"
-        android:inputType="numberDecimal"
-        android:minHeight="48dp" />
+        <EditText
+            android:id="@+id/et_nama_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/search_box"
+            android:hint="Nama Menu"
+            android:inputType="text"
+            android:minHeight="50dp"
+            android:padding="12dp" />
 
-    <Spinner
-        android:id="@+id/spinner_kategori"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/kategori_menu"
-        android:minHeight="48dp"
-        android:prompt="@string/kategori_menu" />
+        <EditText
+            android:id="@+id/et_harga_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Harga Menu"
+            android:inputType="numberDecimal"
+            android:background="@drawable/search_box"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
 
-    <ImageView
-        android:id="@+id/iv_menu_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_image"
-        android:scaleType="centerCrop"/>
+        <Spinner
+            android:id="@+id/spinner_kategori_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_box"
+            android:entries="@array/kategori_menu"
+            android:minHeight="50dp"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/btn_tambah_gambar"
-        android:layout_width="wrap_content"
-        android:backgroundTint="@color/colorbuton"
-        android:textColor="@color/white"
-        android:layout_height="wrap_content"
-        android:text="Tambah Gambar"
-        android:layout_marginTop="8dp"/>
+        <!-- Upload Gambar Menu -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:background="@drawable/search_box">
 
-    <Button
-        android:id="@+id/btn_simpan_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorbuton"
-        android:textColor="@color/white"
-        android:text="Simpan Menu"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+            <ImageView
+                android:id="@+id/menu_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_image"
+                android:scaleType="centerCrop" />
+
+            <Button
+                android:id="@+id/iv_menu_image"
+                android:layout_width="169dp"
+                android:layout_height="49dp"
+                android:text="Tambah Gambar"
+                android:layout_marginStart="92dp"
+                android:textColor="@color/white"
+                android:background="@drawable/button_menu" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            android:text="Bahan Baku :"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="@color/black" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_daftar_bahan_baku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+
+
+
+        <Button
+            android:id="@+id/btn_simpan_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan Menu"
+            android:textColor="@color/white"
+            android:background="@drawable/button_menu"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

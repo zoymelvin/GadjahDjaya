@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_rounded"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tambah Pengeluaran"
+        android:fontFamily="@font/poppinsmedium"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:paddingBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nominal Pengeluaran"
+        android:fontFamily="@font/poppinsmedium"
+        android:inputType="numberDecimal"
+        android:background="@drawable/bg_input_rounded"
+        android:padding="9dp"/>
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Keterangan Pengeluaran"
+        android:inputType="textCapSentences"
+        android:fontFamily="@font/poppinsmedium"
+        android:background="@drawable/bg_input_rounded"
+        android:padding="9dp"
+        android:layout_marginTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/spPaymentMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_rounded"
+        android:fontFamily="@font/poppinsmedium"
+        android:padding="9dp"/>
+
+
+    <Button
+        android:id="@+id/btnSaveExpense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:fontFamily="@font/poppinsmedium"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#F44336"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

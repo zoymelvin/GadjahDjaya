@@ -1,10 +1,12 @@
 package com.app.gadjahdjaya
 
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.widget.ImageButton
+import com.app.gadjahdjaya.ui.FragmentKeuangan
 import com.app.gadjahdjaya.ui.menu.MenuFragment
 import com.app.gadjahdjaya.ui.stokbahan.StokBahanBakuFragment
 
@@ -28,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_keuangan -> {
-                    openFragment(KeuanganFragment())
+                    openFragment(FragmentKeuangan())
                     true
                 }
                 R.id.navigation_bahanbaku -> {

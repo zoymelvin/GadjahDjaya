@@ -35,4 +35,11 @@
         android:name="com.app.gadjahdjaya.ui.stokbahan.StokMenipisFragment"
         android:label="Stok Menipis"
         tools:layout="@layout/fragment_stok_menipis" />
+
+    <fragment
+        android:id="@+id/penjualanMenuFragment"
+        android:name="com.app.gadjahdjaya.PenjualanMenuFragment"
+        android:label="Penjualan Menu"
+        tools:layout="@layout/fragment_penjualan_menu" />
+
 </navigation>

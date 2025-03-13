@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.gadjahdjaya.model.MenuItem
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class MenuAdapterBeranda(
     private val context: Context,
@@ -46,10 +49,15 @@ class MenuAdapterBeranda(
         }
 
         fun bind(menuItem: MenuItem) {
+            val symbols = DecimalFormatSymbols(Locale("id", "ID"))
+            symbols.groupingSeparator = '.'
+            val formatter = DecimalFormat("#,###", symbols)
+
             titleView?.text = menuItem.nama
-            priceView?.text = "Rp. ${menuItem.harga}"
+            priceView?.text = "Rp ${formatter.format(menuItem.harga)}"
             Glide.with(context).load(menuItem.gambar).into(imageView!!)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

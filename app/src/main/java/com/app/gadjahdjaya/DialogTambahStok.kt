@@ -65,6 +65,7 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
     private fun tambahStok(jumlahTambah: Double) {
         val stokBaru = bahan.stok + jumlahTambah
         val stokMaksimumBaru = if (stokBaru > bahan.stokMaksimum) stokBaru else bahan.stokMaksimum
+        val kategori = bahan.kategori ?: "Tidak diketahui"
 
 
         // ✅ Referensi ke `bahan_baku` dan `log_stok`
@@ -85,6 +86,7 @@ class DialogTambahStok(private val bahan: BahanBaku) : DialogFragment() {
                     "nama" to bahan.nama,
                     "jumlah" to jumlahTambah,
                     "satuan" to bahan.satuan,
+                    "kategori" to kategori,
                     "waktu" to getCurrentTimestamp(),
                 )
 

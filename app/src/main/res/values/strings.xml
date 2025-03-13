@@ -6,10 +6,4 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="increase_quantity">Increase quantity</string>
     <string name="decrease_quantity">Decrease quantity</string>
-    <string-array name="periode_array">
-        <item>Harian</item>
-        <item>Mingguan</item>
-        <item>Bulanan</item>
-        <item>Tahunan</item>
-    </string-array>
 </resources>

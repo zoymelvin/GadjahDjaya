@@ -99,6 +99,7 @@ class DialogTambahBahan(private val bahan: BahanBaku? = null) : DialogFragment()
                     "nama" to nama,
                     "jumlah" to stokTambahan,
                     "satuan" to satuan,
+                    "kategori" to kategori,
                     "waktu" to getCurrentTime(),
                 )
 
