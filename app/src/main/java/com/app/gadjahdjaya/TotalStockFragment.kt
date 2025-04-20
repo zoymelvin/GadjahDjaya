@@ -2,6 +2,7 @@ package com.app.gadjahdjaya.ui.stokbahan
 
 import DatePickerFragment
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.app.gadjahdjaya.databinding.FragmentTotalStockBinding
 import com.app.gadjahdjaya.export.CsvExporter
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -30,6 +32,11 @@ class FragmentTotalStock : Fragment() {
     ): View {
         _binding = FragmentTotalStockBinding.inflate(inflater, container, false)
         pieChart = binding.pieChart
+
+        // Tampilkan data hari ini saat pertama kali membuka halaman
+        val currentDate = Calendar.getInstance().time
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentDate)
+        fetchDataFromFirebase(today, today)
 
         // Panggil DatePicker saat ikon kalender diklik
         binding.btnDatePicker.setOnClickListener {
@@ -104,43 +111,88 @@ class FragmentTotalStock : Fragment() {
     private fun updatePieChart(dataMap: Map<String, Float>) {
         val entries = ArrayList<PieEntry>()
         for ((key, value) in dataMap) {
-            entries.add(PieEntry(value, key)) // Hanya tampilkan kategori tanpa persentase di label
+            entries.add(PieEntry(value, "")) // Empty label to hide category names
         }
 
+        // Original color mapping for each category
         val colors = mapOf(
-            "bumbu halus" to Color.parseColor("#4CAF50"), // Green2
-            "kecap" to Color.parseColor("#5C4125"), // Brown
+            "bumbu halus" to Color.parseColor("#4CAF50"), // Green
+            "kecap" to Color.parseColor("#5C4125"),      // Brown
             "minyak goreng" to Color.parseColor("#F5F05F"), // Yellow
-            "sayur" to Color.parseColor("#34D399"), // Green
-            "mie" to Color.parseColor("#F9932C"), // Orange
-            "protein" to Color.parseColor("#FF3D00"), // Red
-            "lainnya" to Color.parseColor("#2563EB") // Blue Primary
+            "sayur" to Color.parseColor("#34D399"),      // Light Green
+            "mie" to Color.parseColor("#F9932C"),       // Orange
+            "protein" to Color.parseColor("#FF3D00"),   // Red
+            "lainnya" to Color.parseColor("#2563EB")    // Blue
         )
 
-        val dataSet = PieDataSet(entries, "Distribusi Stok")
-        dataSet.colors = entries.map { colors[it.label.lowercase()] ?: Color.GRAY }
-        dataSet.valueTextSize = 14f
-        dataSet.setDrawValues(true) // Pastikan nilai persentase tampil di chart
-        dataSet.valueFormatter = PercentFormatter(pieChart) // Tampilkan nilai dalam format persen tanpa angka desimal
+        val dataSet = PieDataSet(entries, "").apply {
+            // Assign colors based on category
+            this.colors = entries.mapIndexed { index, _ ->
+                val category = dataMap.keys.elementAt(index).lowercase()
+                colors[category] ?: Color.GRAY
+            }
 
-        val pieData = PieData(dataSet)
-        pieData.setValueTextSize(14f)
-        pieData.setValueTextColor(Color.BLACK) // Pastikan teks terbaca
+            valueTextSize = 12f
+            setDrawValues(true)
+            valueFormatter = PercentFormatter(pieChart)
+            valueTextColor = Color.WHITE
+            valueTypeface = Typeface.DEFAULT_BOLD
+            sliceSpace = 2f
+            selectionShift = 5f
+            setDrawIcons(false)
+        }
+
+        // Pie chart configuration
+        pieChart.apply {
+            isDrawHoleEnabled = true
+            setHoleColor(Color.TRANSPARENT)
+            holeRadius = 45f
+            setTransparentCircleRadius(50f)
+            setTransparentCircleColor(Color.parseColor("#80FFFFFF"))
+            setTransparentCircleAlpha(100)
+            setDrawEntryLabels(false)
+            legend.isEnabled = false
+            description.isEnabled = false
+            rotationAngle = 0f
+            isRotationEnabled = true
+            setUsePercentValues(true)
+            animateY(1000, Easing.EaseInOutQuad)
+            setDrawCenterText(true)
+            centerText = "Total\n100%"
+            setCenterTextSize(16f)
+            setCenterTextColor(Color.BLACK)
+            setCenterTextTypeface(Typeface.DEFAULT_BOLD)
+            elevation = 8f
+            setExtraOffsets(5f, 10f, 5f, 5f)
+        }
+
+        val pieData = PieData(dataSet).apply {
+            setValueTextSize(12f)
+        }
 
         pieChart.data = pieData
-        pieChart.setUsePercentValues(true) // Konversi nilai ke persentase
-        pieChart.invalidate() // Refresh PieChart
+        pieChart.invalidate()
 
-        // Perbarui nilai pada UI kategori di bawah PieChart
-        binding.bumbu.text = "${dataMap.getOrDefault("bumbu halus", 0f).toInt()}%"
-        binding.kecap.text = "${dataMap.getOrDefault("kecap", 0f).toInt()}%"
-        binding.goreng.text = "${dataMap.getOrDefault("minyak goreng", 0f).toInt()}%"
-        binding.sayur.text = "${dataMap.getOrDefault("sayur", 0f).toInt()}%"
-        binding.mie.text = "${dataMap.getOrDefault("mie", 0f).toInt()}%"
-        binding.protein.text = "${dataMap.getOrDefault("protein", 0f).toInt()}%"
-        binding.lain.text = "${dataMap.getOrDefault("lainnya", 0f).toInt()}%"
+        // Update category values with original colors
+        binding.apply {
+            listOf(
+                Triple(bumbu, "bumbu halus", "#060606"),
+                Triple(kecap, "kecap", "#060606"),
+                Triple(goreng, "minyak goreng", "#060606"),
+                Triple(sayur, "sayur", "#060606"),
+                Triple(mie, "mie", "#060606"),
+                Triple(protein, "protein", "#060606"),
+                Triple(lain, "lainnya", "#060606")
+            ).forEach { (textView, category, colorHex) ->
+                // Format percentage with 1 decimal place
+                val percentage = dataMap.getOrDefault(category, 0f)
+                textView.text = "%.1f%%".format(percentage).replace(",", ".") // Ensure dot as decimal separator
+                textView.setTextColor(Color.parseColor(colorHex))
+                textView.typeface = Typeface.DEFAULT_BOLD
+                textView.textSize = 12f
+            }
+        }
 
-        // Ambil data total item, kategori, dan stok menipis dari Firebase
         fetchStockSummary()
     }
 
@@ -165,11 +217,6 @@ class FragmentTotalStock : Fragment() {
                         stokMenipis++
                     }
                 }
-
-                // Perbarui UI
-                binding.totalItem.text = totalItem.toString()
-                binding.totalKategori.text = kategoriSet.size.toString()
-                binding.stokMenipis.text = stokMenipis.toString()
             }
 
             override fun onCancelled(error: DatabaseError) {}

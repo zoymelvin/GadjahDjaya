@@ -43,7 +43,7 @@
         android:id="@+id/descStokMenipis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Beberapa bahan baku hampir habis. Periksa stok sebelum kehabisan!"
+        android:text="Periksa stok sebelum kehabisan!"
         android:textSize="14sp"
         android:textColor="@color/grey"
         android:fontFamily="@font/poppinsmedium"

@@ -39,10 +39,10 @@ data class MenuItem(
     var gambar: String = "",
     var nama: String = "",
     var harga: Int = 0,
-    var jumlah: Int = 1,  // ✅ **Tambahan: Menyimpan jumlah menu (default = 1)**
+    var jumlah: Int = 1,
     var timestamp: Long = 0L,
-    var deskripsi: String = "",  // ✅ **Tambahan: Deskripsi menu**
-    var bahanBakuDibutuhkan: List<BahanBakuDibutuhkan> = listOf() // ✅ **List bahan baku yang dibutuhkan**
+    var deskripsi: String = "",
+    var bahanBakuDibutuhkan: List<BahanBakuDibutuhkan> = listOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -50,7 +50,7 @@ data class MenuItem(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readInt(),
-        parcel.readInt(),  // ✅ **Tambahan: Membaca jumlah dari parcel**
+        parcel.readInt(),
         parcel.readLong(),
         parcel.readString() ?: "",
         parcel.createTypedArrayList(BahanBakuDibutuhkan) ?: listOf()

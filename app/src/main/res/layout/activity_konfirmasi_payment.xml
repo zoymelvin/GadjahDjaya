@@ -58,7 +58,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppinsbold"
-        android:text="Rp 240.000"
+        android:text="Rp 0"
         android:textColor="@color/green"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"

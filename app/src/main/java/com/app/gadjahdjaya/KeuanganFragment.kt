@@ -1,6 +1,7 @@
 package com.app.gadjahdjaya.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.fonts.Font
@@ -18,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -28,12 +30,14 @@ import com.app.gadjahdjaya.TransactionAdapter
 import com.app.gadjahdjaya.Transaksi
 import com.app.gadjahdjaya.Item
 import com.app.gadjahdjaya.PenjualanMenuFragment
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.*
@@ -54,7 +58,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
+import kotlin.math.max
 
 
 class FragmentKeuangan : Fragment() {
@@ -255,23 +259,82 @@ class FragmentKeuangan : Fragment() {
 
 
     private fun loadChart(income: Int, expense: Int) {
+        // Create entries
         val entries = listOf(
             BarEntry(0f, income.toFloat()),
             BarEntry(1f, Math.abs(expense.toFloat()))
         )
-        val dataSet = BarDataSet(entries, "Keuangan").apply {
-            colors = ColorTemplate.MATERIAL_COLORS.toList()
+
+        // Modern dataset styling
+        val dataSet = BarDataSet(entries, "").apply {
+            colors = listOf(
+                ContextCompat.getColor(requireContext(), R.color.green2), // Green for income
+                ContextCompat.getColor(requireContext(), R.color.red)   // Red for expense
+            )
+            valueTextColor = Color.BLACK  // Changed to black for better visibility
+            valueTextSize = 10f           // Larger text size
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return "Rp${formatNumber(value.toInt())}" // Compact format
+                }
+            }
+            setDrawValues(true)
+            highLightAlpha = 0            // Disable highlight effect
         }
 
-        val barData = BarData(dataSet)
-        barChart.data = barData
+        // Modern bar chart configuration with wider bars
+        barChart.apply {
+            data = BarData(dataSet).apply {
+                barWidth = 0.6f  // Wider bars (original was 0.4f)
+            }
+
+            // X-axis styling
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                axisLineColor = Color.LTGRAY
+                textColor = Color.DKGRAY
+                textSize = 12f
+                granularity = 1f
+                valueFormatter = IndexAxisValueFormatter(listOf("Pemasukan", "Pengeluaran"))
+            }
+
+            // Left axis styling
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = Color.parseColor("#EEEEEE")
+                axisLineColor = Color.LTGRAY
+                textColor = Color.DKGRAY
+                textSize = 10f
+                axisMinimum = 0f
+                axisMaximum = max(income, Math.abs(expense)).toFloat() * 1.3f  // More space for values
+            }
+
+            // General chart settings
+            axisRight.isEnabled = false
+            legend.isEnabled = false
+            description.isEnabled = false
+            setDrawBarShadow(false)
+            setDrawValueAboveBar(true)
+            setFitBars(true)
+            setPinchZoom(false)
+            setDrawGridBackground(false)
+            extraBottomOffset = 15f  // More bottom padding
+
+            // Value label positioning
+            setExtraOffsets(0f, 0f, 0f, 20f)  // Add space for top values
+
+            // Animation
+            animateY(1000, Easing.EaseInOutQuad)
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
         barChart.invalidate()
+    }
 
-        barChart.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawGridLines(false)
-            valueFormatter = IndexAxisValueFormatter(listOf("Pemasukan", "Pengeluaran"))
-        }
+    // Helper function to format numbers with dots (39.000)
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.GERMAN).format(number)
     }
 
     private fun toggleTransactionDetail(transaction: Transaksi) {

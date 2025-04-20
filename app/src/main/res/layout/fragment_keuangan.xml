@@ -104,7 +104,7 @@
                         android:id="@+id/tvIncome"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Rp 0"
+                        android:text="Rp 160.000"
                         android:fontFamily="@font/poppinsregular"
                         android:textSize="17sp"
                         android:textColor="#4CAF50"
@@ -138,7 +138,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsregular"
                         android:gravity="center"
-                        android:text="Rp -0"
+                        android:text="Rp -35.000"
                         android:textColor="#F44336"
                         android:textSize="17sp" />
                 </LinearLayout>
@@ -168,7 +168,7 @@
                         android:id="@+id/tvProfit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Rp 0"
+                        android:text="Rp 125.000"
                         android:fontFamily="@font/poppinsregular"
                         android:textSize="17sp"
                         android:textColor="#2196F3"
@@ -201,7 +201,9 @@
                 android:id="@+id/rvTransactions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                tools:listitem="@layout/item_transaction"
+                tools:itemCount="3"/>
 
             <!-- Tombol Aksi -->
             <LinearLayout

@@ -97,7 +97,10 @@
         app:layout_constraintTop_toBottomOf="@id/search_container"
         app:layout_constraintBottom_toTopOf="@id/btn_tambah_menu"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_menu"
+        tools:itemCount="1"/>
 
     <!-- RecyclerView Menu Minuman -->
     <androidx.recyclerview.widget.RecyclerView
@@ -108,7 +111,9 @@
         app:layout_constraintTop_toBottomOf="@id/search_container"
         app:layout_constraintBottom_toTopOf="@id/btn_tambah_menu"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_menu"/>
 
     <!-- Tombol Tambah Menu -->
     <Button

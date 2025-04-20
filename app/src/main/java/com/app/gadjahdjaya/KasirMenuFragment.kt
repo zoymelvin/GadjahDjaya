@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -141,7 +142,6 @@ class KasirMenuFragment : Fragment() {
                         }
                     }
                 }
-
                 makananAdapter.notifyDataSetChanged()
                 minumanAdapter.notifyDataSetChanged()
             }
@@ -185,6 +185,7 @@ class KasirMenuFragment : Fragment() {
 
     private fun navigateToPayment() {
         if (cartMap.isEmpty()) {
+            showErrorToast("Silakan tambahkan menu terlebih dahulu")
             return
         }
 
@@ -193,5 +194,9 @@ class KasirMenuFragment : Fragment() {
         val intent = Intent(requireContext(), PaymentActivity::class.java)
         intent.putParcelableArrayListExtra("cartItems", cartList)
         startActivity(intent)
+    }
+
+    private fun showErrorToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

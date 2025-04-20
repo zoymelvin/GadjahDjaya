@@ -38,7 +38,7 @@ class TransactionAdapter(
         private val tvDescription: TextView = itemView.findViewById(R.id.tvDescription) // 🔥 Tambahkan ini
 
         fun bind(transaction: Transaksi, clickListener: (Transaksi) -> Unit) {
-            // Format harga dengan ribuan (Rp 12.000)
+
             val formattedAmount = formatCurrency(transaction.amount)
             tvAmount.text = "Rp $formattedAmount"
 
