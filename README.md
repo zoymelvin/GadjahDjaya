@@ -1,6 +1,6 @@
 # GadjahDjaya
 
-GadjahDjaya adalah aplikasi Point of Sale (POS) berbasis Android yang dirancang untuk membantu mengelola operasi bisnis restoran atau kafe. Aplikasi ini mencakup fungsionalitas untuk manajemen menu, pelacakan inventaris bahan baku, sistem kasir dengan integrasi pembayaran, dan pelaporan keuangan dasar.
+GadjahDjaya adalah aplikasi Point of Sale (POS) berbasis Android yang dirancang untuk membantu mengelola operasi bisnis Rumah makan GadjahDjaya. Aplikasi ini mencakup fungsionalitas untuk manajemen menu, pelacakan inventaris bahan baku, sistem kasir dengan integrasi pembayaran, dan pelaporan keuangan dasar.
 
 ## Fitur Utama
 
