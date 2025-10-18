@@ -91,7 +91,7 @@ Untuk menjalankan aplikasi ini secara lokal:
 
 1.  **Clone** repositori ini:
     ```sh
-    git clone https://github.com/[NAMA_PENGGUNA_ANDA]/GadjahDjaya.git
+    https://github.com/zoymelvin/GadjahDjaya
     ```
 2.  **Buka** project di Android Studio.
 3.  **Siapkan Firebase:**
